@@ -1,0 +1,5 @@
+make basic menu page
+
+make database and populate it
+(to begin with, just a table "pizzas" with columns "id", "name", nullable "image")
+read from database
