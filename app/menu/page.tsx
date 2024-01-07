@@ -26,7 +26,7 @@ function PizzaRow (props: Pizza) {
           </tr>
         </tbody>
       </table>
-      <p className='text-zinc-400 italic'>
+      <p className='text-zinc-400 italic first-letter:capitalize'>
         {props.ingredients.map((item, i) => (item + (i == props.ingredients.length - 1 ? "": ", ")))}
       </p>
     </div>
@@ -55,9 +55,9 @@ export default function Menu() {
         <NavBar/>
       </header>
       <PageTitle>Menu</PageTitle>
-      {(pizzas as Pizza[]).map(pizza => {if (pizza) return (
+      {(pizzas as Pizza[]).map(pizza => (
         <PizzaRow key={pizza.id} id={pizza.id} name={pizza.name} ingredients={pizza.ingredients}/>
-      )})}
+      ))}
     </main>
   )
 }
