@@ -125,8 +125,7 @@ export function OpeningTimes() {
   }else {
     openingTime =
       <div>
-        <RestaurantStatus time={time}/>
-        <p>{openingTimes[today] as string}</p>,
+        <p>{openingTimes[today] as string}</p>
       </div>
   }
 
