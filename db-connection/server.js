@@ -62,6 +62,10 @@ app.get('/pizzas', async (request, response) => {
   response.send(retval.filter((item) => item != null));
 });
 
+app.post('/signup', (request, response) => {
+  response.send({msg: "WIP", kind: "warning"});
+})
+
 app.listen(port, () => {
   console.log(`Server up and running at http://localhost:${port}`);
 });

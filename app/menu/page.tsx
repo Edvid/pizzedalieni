@@ -48,7 +48,6 @@ export default function Menu() {
     return () => { setPizzas([]) };
   }, [])
 
-  console.log(pizzas);
   return (
     <main>
       <header>

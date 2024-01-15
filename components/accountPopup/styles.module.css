@@ -1,0 +1,11 @@
+div p.response-kind-warning {
+  color: orange;
+}
+
+div p.response-kind-error {
+ color: red;
+}
+
+div p.response-kind-ok {
+ color: lime;
+}
