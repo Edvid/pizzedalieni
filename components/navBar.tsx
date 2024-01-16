@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import LogIn from '@/components/login'
+import Avatar from '@/components/avatar'
 import { MenuItems } from '@/components/menuItems';
 
 function Logo() {
@@ -28,7 +28,7 @@ function NavBar() {
         <Logo/>
         <div className='flex justify-end space-x-20'>
           <MenuItems/>
-          <LogIn/>
+          <Avatar/>
         </div>
       </div>
     </div>

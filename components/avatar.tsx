@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { AccountPopUp } from "./accountPopup";
 
-function Login() {
+function Avatar() {
   const [showPopup, setShowPopup] = useState(false)
 
   const onclick = () => {
@@ -17,7 +17,7 @@ function Login() {
       <div>
       {
         showPopup ?
-        <AccountPopUp/> : 
+        <AccountPopUp/> :
         ""
       }
       </div>
@@ -25,4 +25,4 @@ function Login() {
   )
 }
 
-export default Login;
+export default Avatar;
