@@ -1,11 +1,11 @@
-div pre.response-kind-warning {
+.logs p.response-kind-warning {
   color: orange;
 }
 
-div pre.response-kind-error {
+.logs p.response-kind-error {
  color: red;
 }
 
-div pre.response-kind-ok {
+.logs p.response-kind-ok {
  color: lime;
 }

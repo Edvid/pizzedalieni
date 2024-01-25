@@ -1,7 +1,0 @@
-- create drop down menus for signing up and logging in (just front end stuff)
-- Make creating users possible
-  - make sure passwords get stored hashed with cryptographically safe hash alg
-- make deleting a user account possible, as well as all data that is personally identifiable (GDPR compliant)
-
-- Make adding pizzas to basket possible. Basket tied to user
-- Make guest accounts possible

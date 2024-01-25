@@ -68,64 +68,50 @@ app.get('/pizzas', async (request, response) => {
 });
 
 app.post('/signup', jsonParser, (request, response) => {
-  let messages = [];
-  let kind = "error";
+  let logs = [];
 
   const body = request.body;
 
-  console.log(body);
   if(body.firstName === '') {
-    messages.push("First name is a required field");
-    kind = "warning";
+    logs.push({ msg: "First name is a required field", kind: "warning" });
   }
   if(body.lastName === '') {
-    messages.push("Last name is a required field");
-    kind = "warning";
+    logs.push({ msg: "Last name is a required field", kind: "warning" });
   }
   if(body.email === '') {
-    messages.push("Email is a required field");
-    kind = "warning";
+    logs.push({ msg: "Email is a required field", kind: "warning" });
   }
 
   if(body.password === ''){
-    messages.push("Password is a required field");
-    kind = "warning";
+    logs.push({ msg: "Password is a required field", kind: "warning" });
   }
   else{
     if (body.password !== body.repeatPassword) {
-      messages.push("Passwords do not match");
-      kind = "warning";
+      logs.push({ msg: "Passwords do not match", kind: "warning" });
     }
     if (body.password.length < 8) {
-      messages.push("Passwords must be at least 8 characters");
-      kind = "warning";
+      logs.push({ msg: "Passwords must be at least 8 characters", kind: "warning" });
     }
     if (body.password == body.password.toLowerCase()) {
-      messages.push("Password must have at least one upper case letter");
-      kind = "warning";
+      logs.push({ msg: "Password must have at least one upper case letter", kind: "warning" });
     }
     if (body.password == body.password.toUpperCase()) {
-      messages.push("Password must have at least one lower case letters, and a number");
-      kind = "warning";
+      logs.push({ msg: "Password must have at least one lower case letters, and a number", kind: "warning" });
     }
     if (!body.password.match(/\d/g)) {
-      messages.push("Password must contain a number");
-      kind = "warning";
+      logs.push({ msg: "Password must contain a number", kind: "warning" });
     }
   }
 
-  if (messages.length == 0) {
-    messages.push(`signup WIP, ${body.firstName}`);
-    kind = "warning";
+  if (logs.length == 0) {
+    logs.push({msg: `signup WIP, ${body.firstName}`, kind: "error"});
   }
 
-  let message = messages.join(',\n');
-
-  response.send({msg: message, kind: kind});
+  response.send({logs: logs});
 })
 
 app.post('/login', (request, response) => {
-  response.send({msg: "login WIP", kind: "warning"});
+  response.send({logs: [{ msg: "login WIP", kind: "error"}]});
 })
 
 app.listen(port, () => {

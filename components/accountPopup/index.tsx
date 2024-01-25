@@ -11,6 +11,11 @@ interface IInput {
     label: string;
 }
 
+interface Log {
+  kind: 'error' | 'warning' | 'ok';
+  msg: string;
+}
+
 function Input(props: IInput){
   return (
     <div className="my-4">
@@ -85,7 +90,15 @@ export function AccountPopUp() {
       },
       body: JSON.stringify(data)
     }).then(response => {console.log(response); return response.json()})
-    .then(response => fetchReponseMessage = <pre className={styles[`response-kind-${response.kind}`] + ' font-bold'}>{response.msg}</pre>);
+    .then(response => fetchReponseMessage = 
+      <div className={styles.logs}>
+        {response.logs?.map((log: Log, i: number) => (
+        <p key={i} className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
+          {log.msg}
+        </p>
+        ))}
+      </div>
+    );
 
     setServerReponse(fetchReponseMessage);
   }
@@ -101,7 +114,15 @@ export function AccountPopUp() {
       },
       body: JSON.stringify(data)
     }).then(response => {console.log(response); return response.json()})
-    .then(response => fetchReponseMessage = <p className={styles[`response-kind-${response.kind}`] + ' font-bold'}>{response.msg}</p>);
+    .then(response => fetchReponseMessage = 
+      <div className={styles.logs}>
+        {response.logs?.map((log: Log, i: number) => (
+        <p key={i} className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
+          {log.msg}
+        </p>
+        ))}
+      </div>
+    );
 
     setServerReponse(fetchReponseMessage);
   }
