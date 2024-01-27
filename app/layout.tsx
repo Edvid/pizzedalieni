@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Nunito_Sans } from 'next/font/google'
 import './globals.css'
+import { ReactNode } from 'react'
 
 const Nunito = Nunito_Sans({weight: '500',  subsets: ['latin'] })
 
@@ -9,11 +10,7 @@ export const metadata: Metadata = {
   description: 'A fake Pizza ordering website from extra-terrestrial life. This is a portfolio project. There are no pizzas',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children, }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body className={Nunito.className}>{children}</body>

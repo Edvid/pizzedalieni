@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface IPageTitle {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 function pageTitle(props: IPageTitle) {

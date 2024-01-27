@@ -60,17 +60,17 @@ function RestaurantStatus(props: {time: Date}) {
   let isOpen: boolean = false;
   if((openingTimes[today] as IOpeningTimeRange).opens !== undefined) {
     isOpen = 
-    isInRange(
-      props.time,
-      "00:00",
-      (openingTimes[yesterday] as IOpeningTimeRange).closes
-    )
-    ||
-    isInRange(
-      props.time,
-      (openingTimes[today] as IOpeningTimeRange).opens,
-      (openingTimes[today] as IOpeningTimeRange).closes
-    );
+      isInRange(
+        props.time,
+        "00:00",
+        (openingTimes[yesterday] as IOpeningTimeRange).closes
+      )
+        ||
+        isInRange(
+          props.time,
+          (openingTimes[today] as IOpeningTimeRange).opens,
+          (openingTimes[today] as IOpeningTimeRange).closes
+        );
   }else if (openingTimes[today] as string === 'ALL DAY') {
     isOpen = true;
   }
@@ -136,14 +136,14 @@ export function OpeningTimes() {
       </h1>
       <table className="m-auto">
         <tbody>
-        <tr>
-          <td>
-            {openingTime}
-          </td>
-          <td>
-            <RestaurantStatus time={time}/>
-          </td>
-        </tr>
+          <tr>
+            <td>
+              {openingTime}
+            </td>
+            <td>
+              <RestaurantStatus time={time}/>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

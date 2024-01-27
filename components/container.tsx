@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface IContainer {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 function container(props: IContainer) {

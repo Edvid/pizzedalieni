@@ -4,9 +4,9 @@ import { MenuItems } from '@/components/menuItems';
 
 function Logo() {
   return (
-      <div>
-        <Image alt="company logo" src="/logo.png" width={80} height={60}></Image>
-      </div>
+    <div>
+      <Image alt="company logo" src="/logo.png" width={80} height={60}></Image>
+    </div>
   )
 }
 

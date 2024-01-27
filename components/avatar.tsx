@@ -15,11 +15,11 @@ function Avatar() {
         Log In
       </button>
       <div>
-      {
-        showPopup ?
-        <AccountPopUp/> :
-        ""
-      }
+        {
+          showPopup ?
+            <AccountPopUp/> :
+            ""
+        }
       </div>
     </div>
   )

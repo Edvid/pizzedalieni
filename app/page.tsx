@@ -14,14 +14,14 @@ export default function Home() {
       <div className='py-12'>
         <table className='m-auto max-w-[min(70rem,60%)]'>
           <tbody>
-          <tr>
-            <td>
-              <PageTitle>Welcome to Pizze d'Alieni</PageTitle>
-            </td>
-            <td>
-              <Image src='/favicon.ico' alt='Alien man' width={100} height={100}></Image>
-            </td>
-          </tr>
+            <tr>
+              <td>
+                <PageTitle>Welcome to Pizze d'Alieni</PageTitle>
+              </td>
+              <td>
+                <Image src='/favicon.ico' alt='Alien man' width={100} height={100}></Image>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>

@@ -5,10 +5,10 @@ import NavBar from '@/components/navBar'
 import PageTitle from '@/components/pageTitle'
 
 interface Pizza {
-    id: number;
-    name: string;
-    ingredients: string[];
-    image?: any;
+  id: number;
+  name: string;
+  ingredients: string[];
+  image?: any;
 }
 
 function PizzaRow (props: Pizza) {
@@ -39,8 +39,8 @@ export default function Menu() {
   useEffect(() => {
     async function fetchPizzas() {
       fetch('http://localhost:3001/pizzas')
-      .then(response => response.json())
-      .then(data => setPizzas(data));
+        .then(response => response.json())
+        .then(data => setPizzas(data));
     }
 
     fetchPizzas();

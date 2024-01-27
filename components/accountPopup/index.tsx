@@ -6,9 +6,9 @@ type popupKind = 'logged in' | 'log in' | 'sign up';
 type inputType = 'text' | 'email' | 'password';
 
 interface IInput {
-    type: inputType;
-    placeholder: string;
-    label: string;
+  type: inputType;
+  placeholder: string;
+  label: string;
 }
 
 interface Log {
@@ -93,9 +93,9 @@ export function AccountPopUp() {
     .then(response => fetchReponseMessage = 
       <div className={styles.logs}>
         {response.logs?.map((log: Log, i: number) => (
-        <p key={i} className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
-          {log.msg}
-        </p>
+          <p key={i} className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
+            {log.msg}
+          </p>
         ))}
       </div>
     );
@@ -117,9 +117,9 @@ export function AccountPopUp() {
     .then(response => fetchReponseMessage = 
       <div className={styles.logs}>
         {response.logs?.map((log: Log, i: number) => (
-        <p key={i} className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
-          {log.msg}
-        </p>
+          <p key={i} className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
+            {log.msg}
+          </p>
         ))}
       </div>
     );
