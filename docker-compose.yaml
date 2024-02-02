@@ -1,0 +1,31 @@
+version: "3"
+services:
+  website:
+    build:
+      context: website
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    # restart: always
+    networks:
+      pizza:
+        ipv4_address: "10.56.1.20"
+  api:
+    build:
+      context: api
+      dockerfile: ./Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./database:/var/lib/postgres
+    networks:
+      pizza:
+        ipv4_address: "10.56.1.21"
+networks:
+  pizza:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.56.1.0/24"
