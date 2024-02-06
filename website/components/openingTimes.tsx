@@ -34,8 +34,6 @@ function isInRange(t: Date, start:HourMinute, end:HourMinute) {
     return 0 < subject.getTime() - test.getTime(); 
   }
 
-  console.log(end)
-
   const startDate: Date = new Date(t);
   const endDate: Date = new Date(t);
   let hourMinuteSplit: string[] = start.split(':');
