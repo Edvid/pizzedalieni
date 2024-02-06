@@ -34,6 +34,8 @@ function isInRange(t: Date, start:HourMinute, end:HourMinute) {
     return 0 < subject.getTime() - test.getTime(); 
   }
 
+  console.log(end)
+
   const startDate: Date = new Date(t);
   const endDate: Date = new Date(t);
   let hourMinuteSplit: string[] = start.split(':');
@@ -60,11 +62,12 @@ function RestaurantStatus(props: {time: Date}) {
   let isOpen: boolean = false;
   if((openingTimes[today] as IOpeningTimeRange).opens !== undefined) {
     isOpen = 
+      ((openingTimes[yesterday] as IOpeningTimeRange).opens !== undefined ?
       isInRange(
         props.time,
         "00:00",
         (openingTimes[yesterday] as IOpeningTimeRange).closes
-      )
+       ) : false)
         ||
         isInRange(
           props.time,
