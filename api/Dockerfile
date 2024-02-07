@@ -1,5 +1,6 @@
-FROM alpine as api
+FROM node:18 as api
 
 COPY . .
 
-CMD node server.js -- --port=3001
+EXPOSE 3001
+CMD node server.js

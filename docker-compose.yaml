@@ -8,21 +8,35 @@ services:
       - "3000:3000"
     depends_on:
       - api
-    # restart: always
+    restart: always
     networks:
       pizza:
-        ipv4_address: "10.56.1.20"
+        ipv4_address: 10.56.1.20
   api:
     build:
       context: api
       dockerfile: ./Dockerfile
     ports:
       - "3001:3001"
-    volumes:
-      - ./database:/var/lib/postgres
+    depends_on:
+      - db
+    restart: always
     networks:
       pizza:
-        ipv4_address: "10.56.1.21"
+        ipv4_address: 10.56.1.21
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: secret1
+      POSTGRES_DB: pizze_dalieni
+    networks:
+      pizza:
+        ipv4_address: 10.56.1.22
 networks:
   pizza:
     ipam:
