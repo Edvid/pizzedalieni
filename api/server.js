@@ -3,11 +3,11 @@ const bodyParser = require('body-parser');
 
 const pgp = require('pg-promise')();
 const databaseConfig = {
-  host: 'localhost',
+  host: '10.56.1.22',
   port: 5432,
   database: 'pizze_dalieni',
   user: 'postgres',
-  password: '', // keep your password secret!
+  password: 'secret1', // keep your password secret!
 };
 const db = pgp(databaseConfig); // use pg-promise's connection function to create the connection object
 const app = express();
