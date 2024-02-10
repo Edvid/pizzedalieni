@@ -38,7 +38,7 @@ export default function Menu() {
 
   useEffect(() => {
     async function fetchPizzas() {
-      fetch('http://localhost:3001/pizzas')
+      fetch(process.env.NEXT_PUBLIC_API_URL + "/pizzas")
         .then(response => response.json())
         .then(data => setPizzas(data));
     }

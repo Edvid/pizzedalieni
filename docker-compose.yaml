@@ -9,6 +9,8 @@ services:
     depends_on:
       - api
     restart: always
+    environment:
+      API_URL: ${API_URL}
     networks:
       pizza:
         ipv4_address: 10.56.1.20
@@ -21,6 +23,8 @@ services:
     depends_on:
       - db
     restart: always
+    environment:
+      DB_PASSWORD: ${DB_PASSWD}
     networks:
       pizza:
         ipv4_address: 10.56.1.21
@@ -30,7 +34,7 @@ services:
       - ./database:/var/lib/postgresql/data
     restart: always
     environment:
-      POSTGRES_PASSWORD: secret1
+      POSTGRES_PASSWORD: ${DB_PASSWD}
       POSTGRES_DB: pizze_dalieni
     networks:
       pizza:

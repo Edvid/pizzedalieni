@@ -7,7 +7,7 @@ const databaseConfig = {
   port: 5432,
   database: 'pizze_dalieni',
   user: 'postgres',
-  password: 'secret1', // keep your password secret!
+  password: process.env.PASSWORD, // keep your password secret!
 };
 const db = pgp(databaseConfig); // use pg-promise's connection function to create the connection object
 const app = express();
