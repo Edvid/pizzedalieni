@@ -9,9 +9,12 @@
 # testing
 /coverage
 
+# secret environment variables
+.env
+
 # next.js
-/**/.next/
-/out/
+/website/.next/
+/website/out/
 
 # production
 /build
