@@ -26,8 +26,6 @@ services:
         ipv4_address: 10.56.1.21
   db:
     image: postgres
-    ports:
-      - "5432:5432"
     volumes:
       - ./database:/var/lib/postgresql/data
     restart: always
