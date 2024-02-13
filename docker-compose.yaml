@@ -12,8 +12,7 @@ services:
     environment:
       API_URL: ${API_URL}
     networks:
-      pizza:
-        ipv4_address: 10.56.1.20
+      - frontend
   api:
     build:
       context: api
@@ -26,8 +25,8 @@ services:
     environment:
       DB_PASSWORD: ${DB_PASSWD}
     networks:
-      pizza:
-        ipv4_address: 10.56.1.21
+      - frontend
+      - backend
   db:
     image: postgres
     volumes:
@@ -37,11 +36,11 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWD}
       POSTGRES_DB: pizze_dalieni
     networks:
-      pizza:
-        ipv4_address: 10.56.1.22
+      - backend
 networks:
-  pizza:
+  frontend:
     ipam:
       driver: default
-      config:
-        - subnet: "10.56.1.0/24"
+  backend:
+    ipam:
+      driver: default

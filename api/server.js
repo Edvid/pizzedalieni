@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 
 const pgp = require('pg-promise')();
 const databaseConfig = {
-  host: '10.56.1.22',
+  host: 'db',
   port: 5432,
   database: 'pizze_dalieni',
   user: 'postgres',
