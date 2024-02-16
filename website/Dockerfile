@@ -1,11 +1,10 @@
 FROM node:18
 
-WORKDIR /app
+WORKDIR /website-app
 
 COPY package*.json ./
 RUN npm install
 
-# except db connection somehow
 COPY . .
 
 EXPOSE 3000
