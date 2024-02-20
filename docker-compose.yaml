@@ -28,9 +28,11 @@ services:
       - frontend
       - backend
   db:
-    image: postgres
+    build:
+      context: db
+      dockerfile: ./Dockerfile
     volumes:
-      - ./database:/var/lib/postgresql/data
+      - ./db/data:/var/lib/postgresql/data
     restart: always
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWD}
