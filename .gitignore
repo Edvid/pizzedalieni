@@ -12,6 +12,9 @@
 # secret environment variables
 .env
 
+# inaccessible
+/db/data
+
 # next.js
 /website/.next/
 /website/out/
