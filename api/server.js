@@ -41,23 +41,13 @@ app.get('/', (request, response) => {
 app.get('/pizzas', async (request, response) => {
   let retval = [];
 
-  await db.any(
-  `
-  SELECT * FROM pizzas
-  `
-  ).then(data => data.forEach(e => {
+  await db.any(`select * from pizza_get_list();`)
+  .then(data => data.forEach(e => {
     retval[e.id] = e;
   }));
 
-  await db.any(
-  `
-  SELECT p.id AS pizza, i.name AS ingredientname
-  FROM pizzas AS p
-  INNER JOIN pizza_ingredients AS pi
-  ON p.id=pi.pizza_id 
-  INNER JOIN ingredients AS i ON pi.ingredient_id=i.id
-  `
-  ).then(data => data.forEach((dat) => {
+  await db.any(`select * from pizza_get_list_with_ingredients();`)
+  .then(data => data.forEach((dat) => {
     const [p, i] = [dat.pizza, dat.ingredientname];
     if (retval[p].ingredients == undefined)
       retval[p].ingredients = [];

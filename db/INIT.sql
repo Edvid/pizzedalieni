@@ -20,8 +20,7 @@ INSERT INTO pizzas (name) VALUES
    ('Area 51'),
    ('Aphelion'),
    ('Andromeda'),
-   ('Galileo')
-;
+   ('Galileo');
 
 INSERT INTO ingredients (name) VALUES
    ('tomato sauce'),
@@ -37,8 +36,7 @@ INSERT INTO ingredients (name) VALUES
    ('onion'),
    ('bacon'),
    ('gloogorx cheese'),
-   ('Saturnian salmon')
-;
+   ('Saturnian salmon');
 
 INSERT INTO pizza_ingredients (pizza_id, ingredient_id) VALUES
   (1, 1),
@@ -72,5 +70,25 @@ INSERT INTO pizza_ingredients (pizza_id, ingredient_id) VALUES
   (5, 2),
   (5, 5),
   (5, 6),
-  (5, 9)
-;
+  (5, 9);
+
+CREATE FUNCTION pizza_get_list()
+RETURNS setof pizzas
+AS
+$$
+  SELECT * FROM pizzas;
+$$
+LANGUAGE SQL;
+
+CREATE FUNCTION pizza_get_list_with_ingredients()
+RETURNS TABLE (pizza VARCHAR(50), ingredientname VARCHAR(50))
+AS
+$$
+  SELECT p.id AS pizza, i.name AS ingredientname
+  FROM pizzas AS p
+  INNER JOIN pizza_ingredients AS pi
+  ON p.id=pi.pizza_id 
+  INNER JOIN ingredients AS i ON pi.ingredient_id=i.id;
+$$
+LANGUAGE SQL;
+
