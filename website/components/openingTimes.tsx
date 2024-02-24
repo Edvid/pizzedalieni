@@ -43,14 +43,16 @@ function DateSetHourMinute(date: Date, hourMinute: HourMinute) {
   return dat;
 }
 
-function isInRange(t: Date, start:HourMinute, end:HourMinute): boolean {
+function isInRange(t: HourMinute, start:HourMinute, end:HourMinute): boolean {
+  const date = new Date("1980-01-01"); 
 
-  const startDate: Date = DateSetHourMinute(t, start);
-  const endDate: Date = DateSetHourMinute(t, end);
+  const tTime: Date = DateSetHourMinute(date, t);
+  const startTime: Date = DateSetHourMinute(date, start);
+  const endTime: Date = DateSetHourMinute(date, end);
 
-  if (startDate > endDate) endDate.setDate(endDate.getDate() + 1);
+  if (startTime > endTime) endTime.setDate(endTime.getDate() + 1);
 
-  return t > startDate && t <= endDate;
+  return tTime >= startTime && tTime < endTime;
 }
 
 type dayOffset = -7 | -6 | -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
@@ -60,25 +62,34 @@ function getWeekDayName(time: Date, offsetDay?: dayOffset) {
   return offsetTime.toLocaleDateString("en-US", {weekday: 'long'});
 }
 
-function isOpen(time: Date): boolean {
-  const today: string = getWeekDayName(time);
-  const yesterday: string = getWeekDayName(time, -1);
+function isOpen(now: Date): boolean {
+  const today: string = getWeekDayName(now);
+  const yesterday: string = getWeekDayName(now, -1);
+  const hourMinuteNow: HourMinute = `${now.getHours()}:${now.getMinutes()}` as HourMinute;
 
+  var inRangeOfTodaysOpeningTimes,inRangeOfYesterdaysOpeningTimes: boolean = false;
+
+  //todaychecks
   const openingTimesToday = openingTimes[today];
   if (openingTimesToday === "ALL DAY") {
     return true;
   }
   else if (openingTimesToday === "CLOSED") {
-    const openingTimesYesterday = openingTimes[yesterday];
-    if(
-      openingTimesYesterday !== "ALL DAY" &&
-        openingTimesYesterday !== "CLOSED"
-    ) {
-      return isInRange(time, "00:00", openingTimesYesterday.closes);
-    }
-    return false;
+    inRangeOfTodaysOpeningTimes = false;
   }
-  return isInRange(time, openingTimesToday.opens, openingTimesToday.closes);
+  else {
+    inRangeOfTodaysOpeningTimes = isInRange(hourMinuteNow, openingTimesToday.opens, openingTimesToday.closes);
+    if(inRangeOfTodaysOpeningTimes) return true;
+  }
+  //yesterday checks
+  const openingTimesYesterday = openingTimes[yesterday];
+  if(
+    openingTimesYesterday !== "ALL DAY" &&
+      openingTimesYesterday !== "CLOSED"
+  ) {
+    inRangeOfYesterdaysOpeningTimes = isInRange(hourMinuteNow, "00:00", openingTimesYesterday.closes);
+  }
+  return inRangeOfTodaysOpeningTimes || inRangeOfYesterdaysOpeningTimes;
 }
 
 function RestaurantStatus(props: {time: Date}) {
@@ -171,3 +182,6 @@ export function OpeningTimesFullDisplay() {
   )
 }
 
+export const exportedForTesting = {
+  isOpen
+}
