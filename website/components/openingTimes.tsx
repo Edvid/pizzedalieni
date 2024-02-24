@@ -1,5 +1,5 @@
 'use client'
-import { ReactNode, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 interface IDictionary<TValue> {
   [id: string]: TValue;
@@ -34,26 +34,23 @@ const openingTimes: IDictionary<OpeningTime> = {
   Sunday: "ALL DAY",
 }
 
+function DateSetHourMinute(date: Date, hourMinute: HourMinute) {
+  const dat = new Date(date)
+  const [hourPart, minutePart]: number[] = hourMinute.split(':').map(part => Number(part));
+  dat.setHours(hourPart);
+  dat.setMinutes(minutePart);
+  dat.setSeconds(0);
+  return dat;
+}
+
 function isInRange(t: Date, start:HourMinute, end:HourMinute): boolean {
-  const isAfter = (subject: Date, test: Date): boolean => {
-    return 0 < subject.getTime() - test.getTime(); 
-  }
 
-  const startDate: Date = new Date(t);
-  const endDate: Date = new Date(t);
-  let hourMinuteSplit: string[] = start.split(':');
-  startDate.setHours(Number(hourMinuteSplit[0]));
-  startDate.setMinutes(Number(hourMinuteSplit[1]));
-  startDate.setSeconds(0);
-  hourMinuteSplit = end.split(':');
-  endDate.setHours(Number(hourMinuteSplit[0]));
-  endDate.setMinutes(Number(hourMinuteSplit[1]));
-  endDate.setSeconds(0);
+  const startDate: Date = DateSetHourMinute(t, start);
+  const endDate: Date = DateSetHourMinute(t, end);
 
-  // if endDate is somehow before startdate, is probably open after midnight
-  if (isAfter(startDate, endDate)) endDate.setDate(endDate.getDate() + 1);
+  if (startDate > endDate) endDate.setDate(endDate.getDate() + 1);
 
-  return isAfter(t, startDate) && !isAfter(t, endDate);
+  return t > startDate && t <= endDate;
 }
 
 type dayOffset = -7 | -6 | -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
