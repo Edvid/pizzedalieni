@@ -2,7 +2,7 @@ import Image from 'next/image'
 import NavBar from '@/components/navBar'
 import PageTitle from '@/components/pageTitle'
 import Container from '@/components/container' 
-import { OpeningTimes } from '@/components/openingTimes'
+import { OpeningTimesFullDisplay as OpeningTimes } from '@/components/openingTimes'
 import RateUs from '@/components/rateus'
 
 export default function Home() {
