@@ -1,4 +1,6 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
+const saltRounds = 3;
 const bodyParser = require('body-parser');
 
 const pgp = require('pg-promise')();
@@ -15,6 +17,19 @@ const port = 3001;
 
 const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: false});
+
+async function createHash(password) {
+  return await bcrypt
+    .genSalt(saltRounds)
+    .then(salt => {
+      return bcrypt.hash(password, salt)
+    })
+    .then(hash => {
+      console.log('Hash: ', hash)
+      return hash;
+    })
+    .catch(err => console.error(err.message))
+}
 
 let sco;
 db.connect()
@@ -41,12 +56,12 @@ app.get('/', (request, response) => {
 app.get('/pizzas', async (request, response) => {
   let retval = [];
 
-  await db.any(`select * from pizza_get_list();`)
+  await db.many(`select * from pizza_get_list();`)
   .then(data => data.forEach(e => {
     retval[e.id] = e;
   }));
 
-  await db.any(`select * from pizza_get_list_with_ingredients();`)
+  await db.many(`select * from pizza_get_list_with_ingredients();`)
   .then(data => data.forEach((dat) => {
     const [p, i] = [dat.pizza, dat.ingredientname];
     if (retval[p].ingredients == undefined)
@@ -57,44 +72,47 @@ app.get('/pizzas', async (request, response) => {
   response.send(retval.filter((item) => item != null));
 });
 
-app.post('/signup', jsonParser, (request, response) => {
+app.post('/signup', jsonParser, async (request, response) => {
   let logs = [];
+
+  function pushtologs(condition, message, kind) {
+    if(condition) {
+      logs.push({ msg: message, kind: kind ? kind : "warning" });
+    }
+  }
 
   const body = request.body;
 
-  if(body.firstName === '') {
-    logs.push({ msg: "First name is a required field", kind: "warning" });
-  }
-  if(body.lastName === '') {
-    logs.push({ msg: "Last name is a required field", kind: "warning" });
-  }
-  if(body.email === '') {
-    logs.push({ msg: "Email is a required field", kind: "warning" });
-  }
+  pushtologs(body.firstName === '', "First name is a required field");
+  pushtologs(body.lastName === '', "Last name is a required field");
+  pushtologs(body.email === '', "Email is a required field");
+  pushtologs(body.password === '', "Password is a required field");
 
-  if(body.password === ''){
-    logs.push({ msg: "Password is a required field", kind: "warning" });
-  }
-  else{
-    if (body.password !== body.repeatPassword) {
-      logs.push({ msg: "Passwords do not match", kind: "warning" });
-    }
-    if (body.password.length < 8) {
-      logs.push({ msg: "Passwords must be at least 8 characters", kind: "warning" });
-    }
-    if (body.password == body.password.toLowerCase()) {
-      logs.push({ msg: "Password must have at least one upper case letter", kind: "warning" });
-    }
-    if (body.password == body.password.toUpperCase()) {
-      logs.push({ msg: "Password must have at least one lower case letters, and a number", kind: "warning" });
-    }
-    if (!body.password.match(/\d/g)) {
-      logs.push({ msg: "Password must contain a number", kind: "warning" });
-    }
-  }
+  pushtologs(body.firstName.length > 80, "First name is not allowed to be longer than 80 characters");
+  pushtologs(body.lastName > 80, "Last name is not allowed to be longer than 80 characters");
+  pushtologs(body.email > 254, "Email is not allowed to be longer than 254 characters");
 
-  if (logs.length == 0) {
-    logs.push({msg: `signup WIP, ${body.firstName}`, kind: "error"});
+  pushtologs(body.password !== body.repeatPassword, "Passwords do not match");
+  pushtologs(body.password.length < 8, "Passwords must be at least 8 characters");
+  pushtologs(body.password == body.password.toLowerCase(), "Password must have at least one upper case letter");
+  pushtologs(body.password == body.password.toUpperCase(), "Password must have at least one lower case letter");
+  pushtologs(!body.password.match(/\d/g), "Password must contain a number");
+
+  if (!~logs.map(log => log.kind).indexOf("warning")) {
+    const hashedpw = await createHash(body.password);
+
+    try {
+      await db.none('call sign_up(${firn}::varchar, ${lasn}::varchar, ${em}::varchar, ${pw}::char)', {
+        firn: body.firstName,
+        lasn: body.lastName,
+        em: body.email,
+        pw: hashedpw
+      });
+      pushtologs(true, "You succesfully signed up! Log in.", "ok");
+    } catch (e) {
+      pushtologs(true, e.detail, e.severity.toLowerCase());
+    }
+
   }
 
   response.send({logs: logs});

@@ -15,6 +15,14 @@ CREATE TABLE pizza_ingredients (
   CONSTRAINT PK PRIMARY KEY (pizza_id, ingredient_id)
 );
 
+CREATE TABLE accounts (
+  id SERIAL PRIMARY KEY,
+  first_name VARCHAR(80),
+  last_name VARCHAR(80),
+  email VARCHAR(254) UNIQUE,
+  password CHAR(60)
+);
+
 INSERT INTO pizzas (name) VALUES
    ('Proxima Centauri'),
    ('Area 51'),
@@ -92,3 +100,29 @@ $$
 $$
 LANGUAGE SQL;
 
+CREATE PROCEDURE sign_up(firn VARCHAR, lasn VARCHAR, em VARCHAR, pw CHAR)
+LANGUAGE SQL
+AS
+$$
+  INSERT INTO accounts (
+    first_name,
+    last_name,
+    email,
+    password
+  ) VALUES (
+    firn,
+    lasn,
+    LOWER(em),
+    pw
+  )
+$$;
+
+CREATE FUNCTION get_user_hashed_password_via_email(em VARCHAR)
+RETURNS TABLE (pw CHAR(60))
+AS
+$$
+  SELECT password from accounts
+  WHERE LOWER(email)=em
+  LIMIT 1
+$$
+LANGUAGE SQL;
