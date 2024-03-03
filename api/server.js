@@ -18,6 +18,27 @@ const port = 3001;
 const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: false});
 
+function dbErrorTranslator(str) {
+  const matchobj = [
+    {
+      regex: /Key \(email\)=\((.*?)\) already exists\./gi,
+      message: (m) => `A user is already signed up with the email ${m[1]}.`
+    }
+  ];
+
+  for (var i = 0; i < matchobj.length; i++){
+    const regex = matchobj[i].regex;
+    const message = matchobj[i].message;
+    var matcher = regex.exec(str);
+
+    if (matcher !== null) {
+      return message(matcher);
+    }
+  }
+
+  return str + "\n\nContact support.";
+}
+
 async function createHash(password) {
   return await bcrypt
     .genSalt(saltRounds)
@@ -110,7 +131,9 @@ app.post('/signup', jsonParser, async (request, response) => {
       });
       pushtologs(true, "You succesfully signed up! Log in.", "ok");
     } catch (e) {
-      pushtologs(true, e.detail, e.severity.toLowerCase());
+      const resp = dbErrorTranslator(e.detail);
+      console.log(resp)
+      pushtologs(true, resp, e.severity.toLowerCase());
     }
 
   }

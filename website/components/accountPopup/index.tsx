@@ -93,9 +93,11 @@ export function AccountPopUp() {
     .then(response => fetchReponseMessage = 
       <div className={styles.logs}>
         {response.logs?.map((log: Log, i: number) => (
-          <p key={i} className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
-            {log.msg}
-          </p>
+          <pre key={i}>
+            <p className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
+              {log.msg}
+            </p>
+          </pre>
         ))}
       </div>
     );
@@ -117,9 +119,11 @@ export function AccountPopUp() {
     .then(response => fetchReponseMessage = 
       <div className={styles.logs}>
         {response.logs?.map((log: Log, i: number) => (
-          <p key={i} className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
-            {log.msg}
-          </p>
+          <pre key={i}>
+            <p className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
+              {log.msg}
+            </p>
+          </pre>
         ))}
       </div>
     );
