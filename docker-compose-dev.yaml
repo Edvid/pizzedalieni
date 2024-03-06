@@ -1,0 +1,37 @@
+version: "3"
+services:
+  api:
+    build:
+      context: api
+      dockerfile: ./Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    restart: always
+    environment:
+      DB_PASSWORD: ${DB_PASSWD}
+    networks:
+      - frontend
+      - backend
+  db:
+    build:
+      context: db
+      dockerfile: ./Dockerfile
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWD}
+      POSTGRES_DB: pizze_dalieni
+    networks:
+      - backend
+networks:
+  frontend:
+    ipam:
+      driver: default
+  backend:
+    ipam:
+      driver: default
