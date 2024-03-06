@@ -56,10 +56,11 @@ async function validateUser(email, password) {
 
   var responses = {
     dbfail: {
-      msg: `get_user_hashed_password_via_email() returned null with the given email:
-${email}.
+      msg: `Couldn't find a user on our system with email:
+${email}
 
-Does such a user exist?`,
+Did you type the email correctly?
+Did you use the correct email?`,
       kind: "warning"
     },
     bcryptfail: {

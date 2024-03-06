@@ -20,7 +20,7 @@ function Input(props: IInput){
   return (
     <div className="my-4">
       <p className="my-1">{props.label}</p>
-      <input id={props.label.replace(/[ -]/g, '').toLowerCase()} type={props.type} placeholder={props.placeholder} className="p-2 px-4 bg-gray-700 border-2 border-gray-600"/>
+      <input id={props.label.replace(/[ -]/g, '').toLowerCase()} type={props.type} placeholder={props.placeholder} className="w-full p-2 px-4 bg-gray-700 border-2 border-gray-600"/>
     </div>
   )
 }
@@ -57,7 +57,7 @@ function RepeatPassword() {
 
 function PopupContainer (props: {children: ReactNode}) {
   return (
-    <div className="fixed bg-gray-700 py-4 my-8 ml-[-12rem] px-[4rem]">
+    <div className="fixed w-[24em] bg-gray-700 py-4 my-8 ml-[-12rem] px-[4rem]">
       {props.children}
     </div>
   )
