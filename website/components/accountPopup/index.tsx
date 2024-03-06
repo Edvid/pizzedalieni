@@ -12,8 +12,8 @@ interface IInput {
 }
 
 interface Log {
-  kind: 'error' | 'warning' | 'ok';
   msg: string;
+  kind: 'error' | 'warning' | 'ok';
 }
 
 function Input(props: IInput){
@@ -63,12 +63,26 @@ function PopupContainer (props: {children: ReactNode}) {
   )
 }
 
+function ServerResponseRenderer (props: { responses: Log[] }) {
+  return (
+      <div className={styles.logs}>
+        {props.responses.map((log: Log, i: number) => (
+          <pre key={i}>
+            <p className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
+              {log.msg}
+            </p>
+          </pre>
+        ))}
+      </div>
+  )
+}
+
 export function AccountPopUp() {
   const [kind, setKind] = useState<popupKind>('log in');
-  const [serverResponse, setServerReponse] = useState<ReactNode>('');
+  const [serverResponse, setServerReponse] = useState<Log[]>([]);
 
   function changeKind(_kind: popupKind){
-    setServerReponse("");
+    setServerReponse([]);
     setKind(_kind);
   }
 
@@ -81,33 +95,21 @@ export function AccountPopUp() {
       repeatPassword: (document.querySelector("input#repeatpassword") as HTMLInputElement).value,
     };
 
-    let fetchReponseMessage: ReactNode = "";
-
     await fetch("http://localhost:3001/signup",{
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data)
-    }).then(response => {console.log(response); return response.json()})
-    .then(response => fetchReponseMessage = 
-      <div className={styles.logs}>
-        {response.logs?.map((log: Log, i: number) => (
-          <pre key={i}>
-            <p className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
-              {log.msg}
-            </p>
-          </pre>
-        ))}
-      </div>
-    );
-
-    setServerReponse(fetchReponseMessage);
+    }).then(response => { return response.json() })
+    .then(response => { console.log(response); setServerReponse(response.logs as Log[]) });
   }
 
   async function logIn() {
-    const data = {};
-    let fetchReponseMessage: ReactNode = "";
+    const data = {
+      email: (document.querySelector("input#email") as HTMLInputElement).value,
+      password: (document.querySelector("input#password") as HTMLInputElement).value,
+    };
 
     await fetch("http://localhost:3001/login",{
       method: "POST",
@@ -115,20 +117,9 @@ export function AccountPopUp() {
         "Content-type": "application/json",
       },
       body: JSON.stringify(data)
-    }).then(response => {console.log(response); return response.json()})
-    .then(response => fetchReponseMessage = 
-      <div className={styles.logs}>
-        {response.logs?.map((log: Log, i: number) => (
-          <pre key={i}>
-            <p className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
-              {log.msg}
-            </p>
-          </pre>
-        ))}
-      </div>
-    );
+    }).then(response => { return response.json() })
+    .then(response => {console.log(response); setServerReponse(response.logs as Log[]) });
 
-    setServerReponse(fetchReponseMessage);
   }
 
   if (kind === 'sign up') {
@@ -140,7 +131,7 @@ export function AccountPopUp() {
         <Email/>
         <Password/>
         <RepeatPassword/>
-        {serverResponse}
+        <ServerResponseRenderer responses={serverResponse}/>
         <button onClick={() => signUp()} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">Sign Up</button>
         <div className="my-4 h-[1px] bg-gray-400"></div>
         <p>Log in instead </p>
@@ -154,7 +145,7 @@ export function AccountPopUp() {
         <h1 className="text-lg font-extrabold italic">Log In</h1>
         <Email/>
         <Password/>
-        {serverResponse}
+        <ServerResponseRenderer responses={serverResponse}/>
         <button onClick={() => logIn()} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">Log In</button>
         <div className="my-4 h-[1px] bg-gray-400"></div>
         <p>Or Sign In With:</p>

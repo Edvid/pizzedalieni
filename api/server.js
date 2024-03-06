@@ -52,6 +52,55 @@ async function createHash(password) {
     .catch(err => console.error(err.message))
 }
 
+async function validateUser(email, password) {
+
+  var responses = {
+    dbfail: {
+      msg: `get_user_hashed_password_via_email() returned null with the given email:
+${email}.
+
+Does such a user exist?`,
+      kind: "warning"
+    },
+    bcryptfail: {
+      msg: "something went wrong when comparing your password to our database. Try again later.",
+      kind: "warning"
+    },
+    nomatch: {
+      msg: "The password you typed was not correct for this user",
+      kind: "warning"
+    },
+    match: {
+      msg: "Login succesful",
+      kind: "ok"
+    }
+  }
+
+  var hash = await
+  db.oneOrNone('select * from get_user_hashed_password_via_email(${em}::varchar)', {
+    em: email
+  });
+
+  if (hash === null) {
+    return responses.dbfail;
+  }
+
+  var message = {};
+  await bcrypt
+  .compare(password, hash)
+  .then(res => {
+    if (res) {
+      message = responses.match;
+    }
+    else {
+      message = responses.nomatch;
+    }
+  })
+  .catch(err => { console.error(err.message), message = responses.bcryptfail})
+
+  return message;
+}
+
 let sco;
 db.connect()
   .then(obj => {
@@ -141,8 +190,21 @@ app.post('/signup', jsonParser, async (request, response) => {
   response.send({logs: logs});
 })
 
-app.post('/login', (request, response) => {
-  response.send({logs: [{ msg: "login WIP", kind: "error"}]});
+app.post('/login', jsonParser, async (request, response) => {
+  let logs = [];
+  const body = request.body;
+
+  function pushtologs(condition, message, kind) {
+    if(condition) {
+      logs.push({ msg: message, kind: kind ? kind : "warning" });
+    }
+  }
+
+  var validateUserLog = await validateUser(body.email, body.password);
+  pushtologs(validateUserLog.kind !== "ok", validateUserLog.msg, validateUserLog.kind);
+  pushtologs(true, "login WIP", "error");
+
+  response.send({logs: logs});
 })
 
 app.listen(port, () => {
