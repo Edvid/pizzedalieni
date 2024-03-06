@@ -79,7 +79,7 @@ Does such a user exist?`,
   var hash = await
   db.oneOrNone('select * from get_user_hashed_password_via_email(${em}::varchar)', {
     em: email
-  });
+  }).then(res => res ? res.pw : null);
 
   if (hash === null) {
     return responses.dbfail;
@@ -172,7 +172,7 @@ app.post('/signup', jsonParser, async (request, response) => {
     const hashedpw = await createHash(body.password);
 
     try {
-      await db.none('call sign_up(${firn}::varchar, ${lasn}::varchar, ${em}::varchar, ${pw}::char)', {
+      await db.none('call sign_up(${firn}::varchar(80), ${lasn}::varchar(80), ${em}::varchar(254), ${pw}::char(60))', {
         firn: body.firstName,
         lasn: body.lastName,
         em: body.email,
