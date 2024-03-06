@@ -65,15 +65,15 @@ function PopupContainer (props: {children: ReactNode}) {
 
 function ServerResponseRenderer (props: { responses: Log[] }) {
   return (
-      <div className={styles.logs}>
-        {props.responses.map((log: Log, i: number) => (
-          <pre key={i}>
-            <p className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
-              {log.msg}
-            </p>
-          </pre>
-        ))}
-      </div>
+    <div className={styles.logs}>
+      {props.responses.map((log: Log, i: number) => (
+        <pre key={i} className="whitespace-pre-wrap">
+          <p className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
+            {log.msg}
+          </p>
+        </pre>
+      ))}
+    </div>
   )
 }
 

@@ -70,7 +70,7 @@ Does such a user exist?`,
       msg: "The password you typed was not correct for this user",
       kind: "warning"
     },
-    match: {
+    login: {
       msg: "Login succesful",
       kind: "ok"
     }
@@ -90,7 +90,7 @@ Does such a user exist?`,
   .compare(password, hash)
   .then(res => {
     if (res) {
-      message = responses.match;
+      message = responses.login;
     }
     else {
       message = responses.nomatch;
@@ -191,20 +191,10 @@ app.post('/signup', jsonParser, async (request, response) => {
 })
 
 app.post('/login', jsonParser, async (request, response) => {
-  let logs = [];
   const body = request.body;
 
-  function pushtologs(condition, message, kind) {
-    if(condition) {
-      logs.push({ msg: message, kind: kind ? kind : "warning" });
-    }
-  }
-
   var validateUserLog = await validateUser(body.email, body.password);
-  pushtologs(validateUserLog.kind !== "ok", validateUserLog.msg, validateUserLog.kind);
-  pushtologs(true, "login WIP", "error");
-
-  response.send({logs: logs});
+  response.send({logs: [validateUserLog] });
 })
 
 app.listen(port, () => {
