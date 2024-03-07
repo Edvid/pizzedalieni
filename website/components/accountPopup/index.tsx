@@ -36,20 +36,35 @@ function ServerResponseRenderer (props: { responses: Log[] }) {
 export function AccountPopUp() {
   const [kind, setKind] = useState<popupKind>('log in');
   const [serverResponse, setServerReponse] = useState<Log[]>([]);
+  const [inputs, setInputs] = useState({});
 
   function changeKind(_kind: popupKind){
     setServerReponse([]);
     setKind(_kind);
   }
 
+  function eventHandler (changedInput: any) {
+    var newInputs = {...inputs};
+    for (const [k, v] of Object.entries(changedInput)) {
+      newInputs[k] = v;
+    }
+    setInputs(newInputs);
+  }
+
   async function signUp() {
-    const data = {
-      firstName: (document.querySelector("input#firstname") as HTMLInputElement).value,
-      lastName: (document.querySelector("input#lastname") as HTMLInputElement).value,
-      email: (document.querySelector("input#email") as HTMLInputElement).value,
-      password: (document.querySelector("input#password") as HTMLInputElement).value,
-      repeatPassword: (document.querySelector("input#repeatpassword") as HTMLInputElement).value,
+    var data = {
+      firstname: "",
+      lastname: "",
+      email: "",
+      password: "",
+      repeatpassword: ""
     };
+
+    for (const [k, v] of Object.entries(inputs)) {
+      if (inputs[k]) data[k] = v;
+    }
+
+    console.log(data);
 
     await fetch("http://localhost:3001/signup",{
       method: "POST",
@@ -63,9 +78,13 @@ export function AccountPopUp() {
 
   async function logIn() {
     const data = {
-      email: (document.querySelector("input#email") as HTMLInputElement).value,
-      password: (document.querySelector("input#password") as HTMLInputElement).value,
+      email: "",
+      password: ""
     };
+
+    for (const [k, v] of Object.entries(inputs)) {
+      if (inputs[k]) data[k] = v;
+    }
 
     await fetch("http://localhost:3001/login",{
       method: "POST",
@@ -82,13 +101,13 @@ export function AccountPopUp() {
     return (
       <PopupContainer>
         <h1 className="text-lg font-extrabold italic">Sign Up</h1>
-        <Input label="First Name"/>
-        <Input label="Last Name"/>
-        <Input label="E-mail"/>
-        <Input label="Password"/>
-        <Input type="password" label="Repeat Password"/>
+        <Input label="First Name" onChange={eventHandler}/>
+        <Input label="Last Name" onChange={eventHandler}/>
+        <Input label="E-mail" onChange={eventHandler}/>
+        <Input label="Password" onChange={eventHandler}/>
+        <Input type="password" label="Repeat Password" onChange={eventHandler}/>
         <ServerResponseRenderer responses={serverResponse}/>
-        <button onClick={() => signUp()} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">Sign Up</button>
+        <button onClick={() => signUp()} className="roundee-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">Sign Up</button>
         <div className="my-4 h-[1px] bg-gray-400"></div>
         <p>Log in instead </p>
         <button onClick={() => { changeKind('log in'); }} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">here</button>

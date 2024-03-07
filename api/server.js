@@ -154,16 +154,16 @@ app.post('/signup', jsonParser, async (request, response) => {
 
   const body = request.body;
 
-  pushtologs(body.firstName === '', "First name is a required field");
-  pushtologs(body.lastName === '', "Last name is a required field");
+  pushtologs(body.firstname === '', "First name is a required field");
+  pushtologs(body.lastname === '', "Last name is a required field");
   pushtologs(body.email === '', "Email is a required field");
   pushtologs(body.password === '', "Password is a required field");
 
-  pushtologs(body.firstName.length > 80, "First name is not allowed to be longer than 80 characters");
-  pushtologs(body.lastName > 80, "Last name is not allowed to be longer than 80 characters");
+  pushtologs(body.firstname.length > 80, "First name is not allowed to be longer than 80 characters");
+  pushtologs(body.lastname > 80, "Last name is not allowed to be longer than 80 characters");
   pushtologs(body.email > 254, "Email is not allowed to be longer than 254 characters");
 
-  pushtologs(body.password !== body.repeatPassword, "Passwords do not match");
+  pushtologs(body.password !== body.repeatpassword, "Passwords do not match");
   pushtologs(body.password.length < 8, "Passwords must be at least 8 characters");
   pushtologs(body.password == body.password.toLowerCase(), "Password must have at least one upper case letter");
   pushtologs(body.password == body.password.toUpperCase(), "Password must have at least one lower case letter");
@@ -174,8 +174,8 @@ app.post('/signup', jsonParser, async (request, response) => {
 
     try {
       await db.none('call sign_up(${firn}::varchar(80), ${lasn}::varchar(80), ${em}::varchar(254), ${pw}::char(60))', {
-        firn: body.firstName,
-        lasn: body.lastName,
+        firn: body.firstname,
+        lasn: body.lastname,
         em: body.email,
         pw: hashedpw
       });
