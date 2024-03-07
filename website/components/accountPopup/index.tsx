@@ -1,34 +1,14 @@
 'use client';
 import { ReactNode, useState } from "react";
 import Input from '@/components/input';
-
-import styles from './styles.module.css';
+import {ServerResponseRenderer as APIRenderer, Log} from './serverresponserenderer';
 
 type popupKind = 'logged in' | 'log in' | 'sign up';
-
-interface Log {
-  msg: string;
-  kind: 'error' | 'warning' | 'ok';
-}
 
 function PopupContainer (props: {children: ReactNode}) {
   return (
     <div className="fixed w-[24em] bg-gray-700 py-4 my-8 ml-[-12rem] px-[4rem]">
       {props.children}
-    </div>
-  )
-}
-
-function ServerResponseRenderer (props: { responses: Log[] }) {
-  return (
-    <div className={styles.logs}>
-      {props.responses.map((log: Log, i: number) => (
-        <pre key={i} className="whitespace-pre-wrap">
-          <p className={styles[`response-kind-${log.kind}`] + ' font-bold'}>
-            {log.msg}
-          </p>
-        </pre>
-      ))}
     </div>
   )
 }
@@ -106,7 +86,7 @@ export function AccountPopUp() {
         <Input label="E-mail" onChange={eventHandler}/>
         <Input label="Password" onChange={eventHandler}/>
         <Input type="password" label="Repeat Password" onChange={eventHandler}/>
-        <ServerResponseRenderer responses={serverResponse}/>
+        <APIRenderer responses={serverResponse}/>
         <button onClick={() => signUp()} className="roundee-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">Sign Up</button>
         <div className="my-4 h-[1px] bg-gray-400"></div>
         <p>Log in instead </p>
@@ -120,7 +100,7 @@ export function AccountPopUp() {
         <h1 className="text-lg font-extrabold italic">Log In</h1>
         <Input label="E-mail"/>
         <Input label="Password"/>
-        <ServerResponseRenderer responses={serverResponse}/>
+        <APIRenderer responses={serverResponse}/>
         <button onClick={() => logIn()} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">Log In</button>
         <div className="my-4 h-[1px] bg-gray-400"></div>
         <p>Or Sign In With:</p>
