@@ -36,7 +36,7 @@ function ServerResponseRenderer (props: { responses: Log[] }) {
 export function AccountPopUp() {
   const [kind, setKind] = useState<popupKind>('log in');
   const [serverResponse, setServerReponse] = useState<Log[]>([]);
-  const [inputs, setInputs] = useState({});
+  const [inputs, setInputs] = useState<{[index: string]: string}>({});
 
   function changeKind(_kind: popupKind){
     setServerReponse([]);
@@ -44,15 +44,15 @@ export function AccountPopUp() {
   }
 
   function eventHandler (changedInput: any) {
-    var newInputs = {...inputs};
-    for (const [k, v] of Object.entries(changedInput)) {
+    var newInputs: {[index: string]: string} = {...inputs};
+    for (const [k, v] of Object.entries<string>(changedInput)) {
       newInputs[k] = v;
     }
     setInputs(newInputs);
   }
 
   async function signUp() {
-    var data = {
+    var data: {[index: string]: string} = {
       firstname: "",
       lastname: "",
       email: "",
@@ -77,7 +77,7 @@ export function AccountPopUp() {
   }
 
   async function logIn() {
-    const data = {
+    var data: {[index: string]: string} = {
       email: "",
       password: ""
     };

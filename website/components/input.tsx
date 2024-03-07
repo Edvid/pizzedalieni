@@ -31,7 +31,7 @@ export default function Input(props: IInput){
     props.placeholder :
     defaultPlaceholders[inputName];
 
-  const handleChange = e => {
+  const handleChange = (e: {target: HTMLInputElement}) => {
     if (props.onChange) {
       props.onChange({[e.target.id]: e.target.value});
     }
