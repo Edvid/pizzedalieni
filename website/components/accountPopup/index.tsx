@@ -1,58 +1,14 @@
 'use client';
 import { ReactNode, useState } from "react";
+import Input from '@/components/input';
+
 import styles from './styles.module.css';
 
 type popupKind = 'logged in' | 'log in' | 'sign up';
-type inputType = 'text' | 'email' | 'password';
-
-interface IInput {
-  type: inputType;
-  placeholder: string;
-  label: string;
-}
 
 interface Log {
   msg: string;
   kind: 'error' | 'warning' | 'ok';
-}
-
-function Input(props: IInput){
-  return (
-    <div className="my-4">
-      <p className="my-1">{props.label}</p>
-      <input id={props.label.replace(/[ -]/g, '').toLowerCase()} type={props.type} placeholder={props.placeholder} className="w-full p-2 px-4 bg-gray-700 border-2 border-gray-600"/>
-    </div>
-  )
-}
-
-function FirstName() {
-  return (
-    <Input type="text" label="First Name" placeholder="Jenny"/>
-  )
-}
-
-function LastName() {
-  return (
-    <Input type="text" label="Last Name" placeholder="Padding"/>
-  )
-}
-
-function Email() {
-  return (
-    <Input type="email" label="E-mail" placeholder="example@email.com"/>
-  )
-}
-
-function Password() {
-  return (
-    <Input type="password" label="Password" placeholder="••••••••" />
-  )
-}
-
-function RepeatPassword() {
-  return (
-    <Input type="password" label="Repeat Password" placeholder="••••••••" />
-  )
 }
 
 function PopupContainer (props: {children: ReactNode}) {
@@ -126,11 +82,11 @@ export function AccountPopUp() {
     return (
       <PopupContainer>
         <h1 className="text-lg font-extrabold italic">Sign Up</h1>
-        <FirstName/>
-        <LastName/>
-        <Email/>
-        <Password/>
-        <RepeatPassword/>
+        <Input label="First Name"/>
+        <Input label="Last Name"/>
+        <Input label="E-mail"/>
+        <Input label="Password"/>
+        <Input type="password" label="Repeat Password"/>
         <ServerResponseRenderer responses={serverResponse}/>
         <button onClick={() => signUp()} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">Sign Up</button>
         <div className="my-4 h-[1px] bg-gray-400"></div>
@@ -143,8 +99,8 @@ export function AccountPopUp() {
     return (
       <PopupContainer>
         <h1 className="text-lg font-extrabold italic">Log In</h1>
-        <Email/>
-        <Password/>
+        <Input label="E-mail"/>
+        <Input label="Password"/>
         <ServerResponseRenderer responses={serverResponse}/>
         <button onClick={() => logIn()} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">Log In</button>
         <div className="my-4 h-[1px] bg-gray-400"></div>
