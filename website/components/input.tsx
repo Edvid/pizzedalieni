@@ -6,20 +6,21 @@ interface IDictionary<TValue> {
   [id: string]: TValue;
 }
 
-const defaultPlaceholders: IDictionary<string> = {
-  password: "••••••••",
-  repeatpassword: "••••••••",
-  email: "example@email.com",
-  firstname: "Jenny",
-  lastname: "Padding"
-}
-
+export type InputDictionary = IDictionary<string>;
 
 interface IInput {
   label: string;
   onChange?: Function;
   type?: inputType;
   placeholder?: string;
+}
+
+const defaultPlaceholders: IDictionary<string> = {
+  password: "••••••••",
+  repeatpassword: "••••••••",
+  email: "example@email.com",
+  firstname: "Jenny",
+  lastname: "Padding"
 }
 
 export default function Input(props: IInput){

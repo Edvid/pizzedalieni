@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import { AccountPopUp } from "./accountPopup";
+import PopUpForm from "./accountPopup/popUpForm";
 
 function Avatar() {
   const [showPopup, setShowPopup] = useState(false)
@@ -17,7 +17,7 @@ function Avatar() {
       <div>
         {
           showPopup ?
-            <AccountPopUp/> :
+            <PopUpForm/> :
             ""
         }
       </div>
