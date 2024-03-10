@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import PopUpForm from "./accountPopup/popUpForm";
+import PopUpForm from "./popUpForm";
 
 function Avatar() {
   const [showPopup, setShowPopup] = useState(false)

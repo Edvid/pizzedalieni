@@ -89,14 +89,19 @@ export default function PopUpForm() {
     setKind(_kind);
   }
 
-  if (kind === 'sign up') {
-    return (
-      <SignUp APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>
-    )
+  switch (kind) {
+    case 'log in':
+      return (
+        <LogIn APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>
+      )
+    case 'sign up':
+      return (
+        <SignUp APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>
+      )
+    case 'logged in':
+      return (
+        ''
+      )
   }
-  else if (kind === 'log in') {
-    return (
-      <LogIn APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>
-    );
-  }
+
 }
