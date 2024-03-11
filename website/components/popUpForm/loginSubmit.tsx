@@ -2,9 +2,13 @@ import React, { MouseEvent } from 'react'
 
 import { InputDictionary } from '@/components/input';
 
-import { Log } from './serverresponserenderer';
+import { CommonAPIResponse } from '.';
 
-async function logIn(inputs: InputDictionary): Promise<Log[]> {
+export interface LoginAPIResponse extends CommonAPIResponse {
+  token?: string
+}
+
+async function logIn(inputs: InputDictionary): Promise<LoginAPIResponse> {
     var data: InputDictionary = {
       email: "",
       password: ""
@@ -21,17 +25,16 @@ async function logIn(inputs: InputDictionary): Promise<Log[]> {
       },
       body: JSON.stringify(data)
     }).then(response => { return response.json() })
-    .then(response => { console.log(response); return response.logs as Log[] })
-    .catch((e) => [{msg: e.message, kind: 'error'}] as Log[]);
+    .then(response => { return response as LoginAPIResponse })
+    .catch((e) => {return {logs: [{msg: e.message, kind: 'error'}]} as LoginAPIResponse});
   }
  
-export default function LoginSubmit(props: {data: InputDictionary, onSubmit: (responses: Log[]) => void}) {
+export default function LoginSubmit(props: {data: InputDictionary, onSubmit: (response: LoginAPIResponse) => void}) {
   const handleSubmit = async (e: MouseEvent) => {
     if (props.onSubmit) {
 
-      console.log(props.data);
-      const responses = await logIn(props.data);
-      props.onSubmit(responses);
+      const response = await logIn(props.data);
+      props.onSubmit(response);
     }
   };
 

@@ -1,10 +1,19 @@
 import React, {ReactNode, useState} from 'react'
 
 import Input, { InputDictionary } from '@/components/input';
-import { ServerResponseRenderer as APIRenderer, Log} from './serverresponserenderer';
+import { ServerResponseRenderer as APIRenderer} from './serverresponserenderer';
 type popupKind = 'logged in' | 'log in' | 'sign up';
 
-import LoginSubmit from './loginSubmit';
+export interface Log {
+  msg: string;
+  kind: 'error' | 'warning' | 'ok';
+}
+
+export interface CommonAPIResponse {
+  logs: Log[]
+}
+
+import LoginSubmit, { LoginAPIResponse } from './loginSubmit';
 import SignupSubmit from './signupSubmit';
 
 function PopupContainer (props: {children: ReactNode}) {
@@ -22,7 +31,7 @@ interface IPopupFormKind {
 
 function SignUp(props: IPopupFormKind) {
   const [inputs, setInputs] = useState<InputDictionary>({});
-  const [APIResponse, setAPIResponse] = useState<Log[]>([]);
+  const [APILogs, setAPILogs] = useState<Log[]>([]);
 
   function eventHandler (changedInput: any) {
     var newInputs: InputDictionary = {...inputs};
@@ -30,6 +39,10 @@ function SignUp(props: IPopupFormKind) {
       newInputs[k] = v;
     }
     setInputs(newInputs);
+  }
+
+  function onSignupSubmit (response: CommonAPIResponse) {
+    setAPILogs(response.logs);
   }
 
   return (
@@ -40,8 +53,8 @@ function SignUp(props: IPopupFormKind) {
       <Input label="E-mail" onChange={eventHandler}/>
       <Input label="Password" onChange={eventHandler}/>
       <Input type="password" label="Repeat Password" onChange={eventHandler}/>
-      <APIRenderer responses={APIResponse}/>
-      <SignupSubmit data={inputs} onSubmit={setAPIResponse}/>
+      <APIRenderer logs={APILogs}/>
+      <SignupSubmit data={inputs} onSubmit={onSignupSubmit}/>
       <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>Log in instead </p>
       <button onClick={() => { props.onChangeKind('log in'); }} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">here</button>
@@ -51,7 +64,7 @@ function SignUp(props: IPopupFormKind) {
 
 function LogIn(props: IPopupFormKind) {
   const [inputs, setInputs] = useState<InputDictionary>({});
-  const [APIResponse, setAPIResponse] = useState<Log[]>([]);
+  const [APILogs, setAPILogs] = useState<Log[]>([]);
 
   function eventHandler (changedInput: any) {
     var newInputs: InputDictionary = {...inputs};
@@ -61,13 +74,36 @@ function LogIn(props: IPopupFormKind) {
     setInputs(newInputs);
   }
 
+  function hasLoginToken(response: CommonAPIResponse): response is LoginAPIResponse {
+    return "token" in response;
+  }
+
+  function containsOnlyOKLogs(response: LoginAPIResponse): Boolean {
+    return response.logs
+      .map((r) => r.kind)
+      .filter((k) => k !== 'ok')
+      .length === 0
+  }
+
+  function onLoginSubmit (response: CommonAPIResponse) {
+    setAPILogs(response.logs);
+    if(hasLoginToken(response)){
+      if(containsOnlyOKLogs(response)){
+        console.log("toot of victory")
+        setTimeout(() => {
+          //log in
+        }, 1000);
+      }
+    }
+  }
+
   return (
     <PopupContainer>
       <h1 className="text-lg font-extrabold italic">Log In</h1>
       <Input label="E-mail" onChange={eventHandler}/>
       <Input label="Password" onChange={eventHandler}/>
-      <APIRenderer responses={APIResponse}/>
-      <LoginSubmit data={inputs} onSubmit={setAPIResponse}/>
+      <APIRenderer logs={APILogs}/>
+      <LoginSubmit data={inputs} onSubmit={onLoginSubmit}/>
       <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>Or Sign In With:</p>
       <div>
