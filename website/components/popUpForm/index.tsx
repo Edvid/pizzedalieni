@@ -17,13 +17,12 @@ function PopupContainer (props: {children: ReactNode}) {
 
 
 interface IPopupFormKind {
-  APIResponse: Log[];
-  onFormSubmit: Function;
-  onChangeKind: (arg0: popupKind) => void;
+  onChangeKind: (kindToChangeTo: popupKind) => void;
 }
 
 function SignUp(props: IPopupFormKind) {
   const [inputs, setInputs] = useState<InputDictionary>({});
+  const [APIResponse, setAPIResponse] = useState<Log[]>([]);
 
   function eventHandler (changedInput: any) {
     var newInputs: InputDictionary = {...inputs};
@@ -41,8 +40,8 @@ function SignUp(props: IPopupFormKind) {
       <Input label="E-mail" onChange={eventHandler}/>
       <Input label="Password" onChange={eventHandler}/>
       <Input type="password" label="Repeat Password" onChange={eventHandler}/>
-      <APIRenderer responses={props.APIResponse}/>
-      <SignupSubmit data={inputs} onSubmit={props.onFormSubmit}/>
+      <APIRenderer responses={APIResponse}/>
+      <SignupSubmit data={inputs} onSubmit={setAPIResponse}/>
       <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>Log in instead </p>
       <button onClick={() => { props.onChangeKind('log in'); }} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">here</button>
@@ -52,6 +51,7 @@ function SignUp(props: IPopupFormKind) {
 
 function LogIn(props: IPopupFormKind) {
   const [inputs, setInputs] = useState<InputDictionary>({});
+  const [APIResponse, setAPIResponse] = useState<Log[]>([]);
 
   function eventHandler (changedInput: any) {
     var newInputs: InputDictionary = {...inputs};
@@ -66,8 +66,8 @@ function LogIn(props: IPopupFormKind) {
       <h1 className="text-lg font-extrabold italic">Log In</h1>
       <Input label="E-mail" onChange={eventHandler}/>
       <Input label="Password" onChange={eventHandler}/>
-      <APIRenderer responses={props.APIResponse}/>
-      <LoginSubmit data={inputs} onSubmit={props.onFormSubmit}/>
+      <APIRenderer responses={APIResponse}/>
+      <LoginSubmit data={inputs} onSubmit={setAPIResponse}/>
       <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>Or Sign In With:</p>
       <div>
@@ -82,15 +82,13 @@ function LogIn(props: IPopupFormKind) {
 
 export default function PopUpForm() {
   const [kind, setKind] = useState<popupKind>('log in');
-  const [APIResponse, setAPIResponse] = useState<Log[]>([]);
   const states: {[index in popupKind]: ReactNode} = {
-    'log in': <LogIn APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>,
-    'sign up': <SignUp APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>,
+    'log in': <LogIn onChangeKind={changeKind}/>,
+    'sign up': <SignUp onChangeKind={changeKind}/>,
     'logged in': <h1></h1>
   }
 
   function changeKind(_kind: popupKind){
-    setAPIResponse([]);
     setKind(_kind);
   }
 
