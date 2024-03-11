@@ -28,7 +28,7 @@ async function signUp(inputs: InputDictionary): Promise<Log[]> {
     .catch((e) => [{msg: e.message, kind: 'error'}] as Log[]);
   }
 
-export default function signupSubmit(props: {data: InputDictionary, onSubmit: Function}) {
+export default function signupSubmit(props: {data: InputDictionary, onSubmit: (responses: Log[]) => void}) {
   const handleSubmit = async (e: MouseEvent) => {
     if (props.onSubmit) {
       const responses = await signUp(props.data);

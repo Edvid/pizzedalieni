@@ -83,25 +83,18 @@ function LogIn(props: IPopupFormKind) {
 export default function PopUpForm() {
   const [kind, setKind] = useState<popupKind>('log in');
   const [APIResponse, setAPIResponse] = useState<Log[]>([]);
+  const states: {[index in popupKind]: ReactNode} = {
+    'log in': <LogIn APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>,
+    'sign up': <SignUp APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>,
+    'logged in': <h1></h1>
+  }
 
   function changeKind(_kind: popupKind){
     setAPIResponse([]);
     setKind(_kind);
   }
 
-  switch (kind) {
-    case 'log in':
-      return (
-        <LogIn APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>
-      )
-    case 'sign up':
-      return (
-        <SignUp APIResponse={APIResponse} onFormSubmit={setAPIResponse} onChangeKind={changeKind}/>
-      )
-    case 'logged in':
-      return (
-        ''
-      )
-  }
-
+  return (
+    states[kind]
+  )
 }
