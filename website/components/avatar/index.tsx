@@ -2,19 +2,11 @@
 import { useState } from "react";
 import AvatarButton from "./Button";
 import AvatarPopUpForm from "./popUpForm";
-
-const userStates = {
-  LogIn: 'log in',
-  SignUp: 'sign up',
-  LoggedIn: 'logged in'
-} as const;
-
-type ObjectValues<T> = T[keyof T];
-
-export type userState = ObjectValues<typeof userStates>;
+import { userState } from "@/utils/userStates";
 
 function Avatar() {
-  const [userState, setUserState] = useState<userState>('log in');
+  console.log(document.cookie)
+  const [userState, setUserState] = useState<userState>(document.cookie? 'logged in' : 'log in');
   const [showPopup, setShowPopup] = useState(false)
 
   const toggleShow = () => {
