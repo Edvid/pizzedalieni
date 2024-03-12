@@ -2,8 +2,9 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const saltRounds = 3;
 const bodyParser = require('body-parser');
-
+const jwt = require('jsonwebtoken');
 const pgp = require('pg-promise')();
+
 const databaseConfig = {
   host: 'db',
   port: 5432,
@@ -152,31 +153,31 @@ app.post('/signup', jsonParser, async (request, response) => {
     }
   }
 
-  const body = request.body;
+  const { firstname, lastname, email, password, repeatpassword } = request.body;
 
-  pushtologs(body.firstname === '', "First name is a required field");
-  pushtologs(body.lastname === '', "Last name is a required field");
-  pushtologs(body.email === '', "Email is a required field");
-  pushtologs(body.password === '', "Password is a required field");
+  pushtologs(firstname === '', "First name is a required field");
+  pushtologs(lastname === '', "Last name is a required field");
+  pushtologs(email === '', "Email is a required field");
+  pushtologs(password === '', "Password is a required field");
 
-  pushtologs(body.firstname.length > 80, "First name is not allowed to be longer than 80 characters");
-  pushtologs(body.lastname > 80, "Last name is not allowed to be longer than 80 characters");
-  pushtologs(body.email > 254, "Email is not allowed to be longer than 254 characters");
+  pushtologs(firstname.length > 80, "First name is not allowed to be longer than 80 characters");
+  pushtologs(lastname > 80, "Last name is not allowed to be longer than 80 characters");
+  pushtologs(email > 254, "Email is not allowed to be longer than 254 characters");
 
-  pushtologs(body.password !== body.repeatpassword, "Passwords do not match");
-  pushtologs(body.password.length < 8, "Passwords must be at least 8 characters");
-  pushtologs(body.password == body.password.toLowerCase(), "Password must have at least one upper case letter");
-  pushtologs(body.password == body.password.toUpperCase(), "Password must have at least one lower case letter");
-  pushtologs(!body.password.match(/\d/g), "Password must contain a number");
+  pushtologs(password !== repeatpassword, "Passwords do not match");
+  pushtologs(password.length < 8, "Passwords must be at least 8 characters");
+  pushtologs(password == password.toLowerCase(), "Password must have at least one upper case letter");
+  pushtologs(password == password.toUpperCase(), "Password must have at least one lower case letter");
+  pushtologs(!password.match(/\d/g), "Password must contain a number");
 
   if (!~logs.map(log => log.kind).indexOf("warning")) {
-    const hashedpw = await createHash(body.password);
+    const hashedpw = await createHash(password);
 
     try {
       await db.none('call sign_up(${firn}::varchar(80), ${lasn}::varchar(80), ${em}::varchar(254), ${pw}::char(60))', {
-        firn: body.firstname,
-        lasn: body.lastname,
-        em: body.email,
+        firn: firstname,
+        lasn: lastname,
+        em: email,
         pw: hashedpw
       });
       pushtologs(true, "You succesfully signed up! Log in.", "ok");
@@ -192,10 +193,22 @@ app.post('/signup', jsonParser, async (request, response) => {
 })
 
 app.post('/login', jsonParser, async (request, response) => {
-  const body = request.body;
+  const { email, password } = request.body;
 
-  var validateUserLog = await validateUser(body.email, body.password);
-  response.send({logs: [validateUserLog] });
+  var validateUserLog = await validateUser(email, password);
+
+  if(validateUserLog.kind === 'ok'){
+    const token = jwt.sign(
+      {userID: email, },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '15m',
+      }
+    );
+    response.send({logs: [validateUserLog], token: token });
+  }else {
+    response.send({logs: [validateUserLog]});
+  }
 })
 
 app.listen(port, () => {

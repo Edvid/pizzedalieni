@@ -23,6 +23,7 @@ services:
       - db
     restart: always
     environment:
+      JWT_SECRET_KEY: ${JWT_API_SECRET}
       DB_PASSWORD: ${DB_PASSWD}
     networks:
       - frontend
