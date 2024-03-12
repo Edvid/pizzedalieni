@@ -1,23 +1,37 @@
 'use client'
 import { useState } from "react";
-import PopUpForm from "./popUpForm";
+import AvatarButton from "./Button";
+import AvatarPopUpForm from "./popUpForm";
+
+const userStates = {
+  LogIn: 'log in',
+  SignUp: 'sign up',
+  LoggedIn: 'logged in'
+} as const;
+
+type ObjectValues<T> = T[keyof T];
+
+export type userState = ObjectValues<typeof userStates>;
 
 function Avatar() {
+  const [userState, setUserState] = useState<userState>('log in');
   const [showPopup, setShowPopup] = useState(false)
 
-  const onclick = () => {
+  const toggleShow = () => {
     setShowPopup(!showPopup);
+  }
+
+  function changeKind(newUserState: userState){
+    setUserState(newUserState);
   }
 
   return (
     <div>
-      <button type="button" onClick={onclick} className="rounded-lg px-4 py-2 m-[-8px] bg-teal-500 hover:bg-transparent border-2 border-teal-500">
-        Log In
-      </button>
+      <AvatarButton onClick={toggleShow} userState={userState}/>
       <div>
         {
           showPopup ?
-            <PopUpForm/> :
+            <AvatarPopUpForm onChangeUserState={changeKind} userState={userState}/> :
             ""
         }
       </div>

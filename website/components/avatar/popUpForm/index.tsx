@@ -2,7 +2,6 @@ import React, {ReactNode, useState} from 'react'
 
 import Input, { InputDictionary } from '@/components/input';
 import { ServerResponseRenderer as APIRenderer} from './serverresponserenderer';
-type popupKind = 'logged in' | 'log in' | 'sign up';
 
 export interface Log {
   msg: string;
@@ -15,18 +14,16 @@ export interface CommonAPIResponse {
 
 import LoginSubmit, { LoginAPIResponse } from './loginSubmit';
 import SignupSubmit from './signupSubmit';
+import PopupContainer from './popupcontainer';
+import { userState } from '../index';
 
-function PopupContainer (props: {children: ReactNode}) {
-  return (
-    <div className="fixed w-[24em] bg-gray-700 py-4 my-8 ml-[-12rem] px-[4rem]">
-      {props.children}
-    </div>
-  )
+interface IPopupForm {
+  userState: userState;
+  onChangeUserState: (userStateToChangeTo: userState) => void;
 }
 
-
 interface IPopupFormKind {
-  onChangeKind: (kindToChangeTo: popupKind) => void;
+  onChangeUserState: (userStateToChangeTo: userState) => void;
 }
 
 function SignUp(props: IPopupFormKind) {
@@ -57,7 +54,7 @@ function SignUp(props: IPopupFormKind) {
       <SignupSubmit data={inputs} onSubmit={onSignupSubmit}/>
       <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>Log in instead </p>
-      <button onClick={() => { props.onChangeKind('log in'); }} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">here</button>
+      <button onClick={() => { props.onChangeUserState('log in'); }} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">here</button>
     </PopupContainer>
   )
 }
@@ -78,7 +75,7 @@ function LogIn(props: IPopupFormKind) {
     return "token" in response;
   }
 
-  function containsOnlyOKLogs(response: LoginAPIResponse): Boolean {
+  function containsOnlyOKLogs(response: CommonAPIResponse): Boolean {
     return response.logs
       .map((r) => r.kind)
       .filter((k) => k !== 'ok')
@@ -91,7 +88,9 @@ function LogIn(props: IPopupFormKind) {
       if(containsOnlyOKLogs(response)){
         console.log("toot of victory")
         setTimeout(() => {
-          //log in
+          const { token } = response;
+          document.cookie = `token=${token}; path=/`;
+          props.onChangeUserState('logged in');
         }, 1000);
       }
     }
@@ -111,24 +110,19 @@ function LogIn(props: IPopupFormKind) {
       </div>
       <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>No Account? Register</p>
-      <button onClick={() => { props.onChangeKind('sign up'); }} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">here</button>
+      <button onClick={() => { props.onChangeUserState('sign up'); }} className="rounded-lg px-2 py-1 mt-2 bg-orange-500 hover:bg-transparent border-2 border-orange-500">here</button>
     </PopupContainer>
   )
 }
 
-export default function PopUpForm() {
-  const [kind, setKind] = useState<popupKind>('log in');
-  const states: {[index in popupKind]: ReactNode} = {
-    'log in': <LogIn onChangeKind={changeKind}/>,
-    'sign up': <SignUp onChangeKind={changeKind}/>,
+export default function AvatarPopUpForm(props: IPopupForm) {
+  const states: {[index in userState]: ReactNode} = {
+    'log in': <LogIn onChangeUserState={props.onChangeUserState}/>,
+    'sign up': <SignUp onChangeUserState={props.onChangeUserState}/>,
     'logged in': <h1></h1>
   }
 
-  function changeKind(_kind: popupKind){
-    setKind(_kind);
-  }
-
   return (
-    states[kind]
+    states[props.userState]
   )
 }

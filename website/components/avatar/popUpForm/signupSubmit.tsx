@@ -39,7 +39,7 @@ export default function signupSubmit(props: {data: InputDictionary, onSubmit: (r
   };
 
   return (
-    <button onClick={(e) => handleSubmit(e)} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">Sign Up</button>
+    <button onClick={(e) => handleSubmit(e)} className="rounded-lg px-2 py-1 mt-2 bg-orange-500 hover:bg-transparent border-2 border-orange-500">Sign Up</button>
   )
 }
 
