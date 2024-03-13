@@ -215,6 +215,17 @@ app.post('/login', jsonParser, async (request, response) => {
   }
 })
 
+app.post('/logout', jsonParser, async (request, response) => {
+  const { token } = request.body;
+
+  // don't need the decoded token in logout at all yet
+  // but might if I implement database stored session management.
+  // For now, you're always allowed to log out of client, regardless
+  // of credentials
+  const decodedToken = jwt.decode(token);
+  response.send({logs: [{msg: "logout permitted", kind: "ok"}]});
+})
+
 app.listen(port, () => {
   console.log(`Server up and running at http://localhost:${port}`);
 });

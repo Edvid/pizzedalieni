@@ -13,10 +13,13 @@ export interface CommonAPIResponse {
 }
 
 import LoginSubmit, { LoginAPIResponse } from './loginSubmit';
+import LogoutSubmit from './logoutSubmit';
 import SignupSubmit from './signupSubmit';
 import PopupContainer from './popupcontainer';
 import { userState, userStates } from '@/utils/userStates';
 import setCookie from '@/utils/setCookie';
+import getCookie from '@/utils/getCookie';
+import deleteCookie from '@/utils/deleteCookie';
 
 interface IPopupForm {
   userState: userState;
@@ -25,6 +28,13 @@ interface IPopupForm {
 
 interface IPopupFormKind {
   onChangeUserState: (userStateToChangeTo: userState) => void;
+}
+
+function containsOnlyOKLogs(response: CommonAPIResponse): Boolean {
+  return response.logs
+    .map((r) => r.kind)
+    .filter((k) => k !== 'ok')
+    .length === 0
 }
 
 function SignUp(props: IPopupFormKind) {
@@ -76,18 +86,10 @@ function LogIn(props: IPopupFormKind) {
     return "token" in response;
   }
 
-  function containsOnlyOKLogs(response: CommonAPIResponse): Boolean {
-    return response.logs
-      .map((r) => r.kind)
-      .filter((k) => k !== 'ok')
-      .length === 0
-  }
-
   function onLoginSubmit (response: CommonAPIResponse) {
     setAPILogs(response.logs);
     if(hasLoginToken(response)){
       if(containsOnlyOKLogs(response)){
-        console.log("toot of victory")
         setTimeout(() => {
           const { token, userInfo } = response;
           const firstname = userInfo && userInfo.firstname ? userInfo.firstname : 'unknown';
@@ -113,11 +115,36 @@ function LogIn(props: IPopupFormKind) {
   )
 }
 
+function UserPopup(props: IPopupFormKind) {
+  const [APILogs, setAPILogs] = useState<Log[]>([]);
+  
+  function onLogoutSubmit (response: CommonAPIResponse) {
+    setAPILogs(response.logs);
+    if(containsOnlyOKLogs(response)){
+      setTimeout(() => {
+        deleteCookie("token");
+        deleteCookie("firstname");
+        props.onChangeUserState('log in');
+      }, 1000);
+    }
+  }
+  return (
+    <PopupContainer>
+      <h1 className="text-lg font-extrabold italic">
+        Hello, {getCookie("firstname")}
+      </h1>
+      <APIRenderer logs={APILogs}/>
+      <LogoutSubmit token={getCookie("token")} onSubmit={onLogoutSubmit}/>
+    </PopupContainer>
+  )
+    
+}
+
 export default function AvatarPopUpForm(props: IPopupForm) {
   const states: {[index in userState]: ReactNode} = {
     'log in': <LogIn onChangeUserState={props.onChangeUserState}/>,
     'sign up': <SignUp onChangeUserState={props.onChangeUserState}/>,
-    'logged in': <h1></h1>
+    'logged in': <UserPopup onChangeUserState={props.onChangeUserState}/>,
   }
 
   return (
