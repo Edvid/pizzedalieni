@@ -41,7 +41,7 @@ function SignUp(props: IPopupFormKind) {
   const [inputs, setInputs] = useState<InputDictionary>({});
   const [APILogs, setAPILogs] = useState<Log[]>([]);
 
-  function eventHandler (changedInput: any) {
+  function eventHandler (changedInput: InputDictionary) {
     var newInputs: InputDictionary = {...inputs};
     for (const [k, v] of Object.entries<string>(changedInput)) {
       newInputs[k] = v;
@@ -74,7 +74,7 @@ function LogIn(props: IPopupFormKind) {
   const [inputs, setInputs] = useState<InputDictionary>({});
   const [APILogs, setAPILogs] = useState<Log[]>([]);
 
-  function eventHandler (changedInput: any) {
+  function eventHandler (changedInput: InputDictionary) {
     var newInputs: InputDictionary = {...inputs};
     for (const [k, v] of Object.entries<string>(changedInput)) {
       newInputs[k] = v;
