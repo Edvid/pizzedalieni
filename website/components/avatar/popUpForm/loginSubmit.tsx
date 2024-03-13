@@ -4,7 +4,12 @@ import { InputDictionary } from '@/components/input';
 
 import { CommonAPIResponse } from '.';
 
+interface APIuserInfo {
+  firstname?: string
+}
+
 export interface LoginAPIResponse extends CommonAPIResponse {
+  userInfo?: APIuserInfo
   token?: string
 }
 

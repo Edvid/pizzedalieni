@@ -89,8 +89,10 @@ function LogIn(props: IPopupFormKind) {
       if(containsOnlyOKLogs(response)){
         console.log("toot of victory")
         setTimeout(() => {
-          const { token } = response;
-          document.cookie = `token=${token}; path=/`;
+          const { token, userInfo } = response;
+          const firstname = userInfo && userInfo.firstname ? userInfo.firstname : 'unknown';
+          setCookie("token", token? token : "");
+          setCookie("firstname", firstname);
           props.onChangeUserState('logged in');
         }, 1000);
       }

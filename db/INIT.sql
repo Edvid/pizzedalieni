@@ -117,11 +117,11 @@ $$
   )
 $$;
 
-CREATE FUNCTION get_user_hashed_password_via_email(em VARCHAR)
-RETURNS TABLE (pw CHAR(60))
+CREATE FUNCTION get_user_via_email(em VARCHAR)
+RETURNS setof accounts
 AS
 $$
-  SELECT password from accounts
+  SELECT * from accounts
   WHERE LOWER(email)=em
   LIMIT 1
 $$

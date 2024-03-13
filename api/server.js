@@ -79,9 +79,9 @@ Did you use the correct email?`,
   }
 
   var hash = await
-  db.oneOrNone('select * from get_user_hashed_password_via_email(${em}::varchar)', {
+  db.oneOrNone('select password from get_user_via_email(${em}::varchar)', {
     em: email
-  }).then(res => res ? res.pw : null);
+  }).then(res => res ? res.password : null);
 
   if (hash === null) {
     return responses.dbfail;
@@ -198,14 +198,18 @@ app.post('/login', jsonParser, async (request, response) => {
   var validateUserLog = await validateUser(email, password);
 
   if(validateUserLog.kind === 'ok'){
+    var user = await
+      db.oneOrNone('select * from get_user_via_email(${em}::varchar)', {
+        em: email
+      });
     const token = jwt.sign(
-      {userID: email, },
+      {userID: user.id },
       process.env.JWT_SECRET,
       {
         expiresIn: '15m',
       }
     );
-    response.send({logs: [validateUserLog], token: token });
+    response.send({logs: [validateUserLog], token: token, userInfo: { firstname: user.first_name }});
   }else {
     response.send({logs: [validateUserLog]});
   }
