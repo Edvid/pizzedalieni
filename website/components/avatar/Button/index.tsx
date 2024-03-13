@@ -1,5 +1,6 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
 import { userState } from '..'
+import getCookie from '@/utils/getCookie'
 
 function LogIn (props: { onClick: () => void }){
   return (
@@ -20,7 +21,7 @@ function SignUp (props: { onClick: () => void }){
 function AvatarButton (props: { onClick: () => void }){
   return (
     <button type="button" onClick={props.onClick} className="rounded-lg px-4 py-2 m-[-8px] bg-blue-500 hover:bg-transparent border-2 border-blue-500">
-      A
+      {getCookie("firstname")?.substring(0, 1).toUpperCase()}
     </button>
   )
 }

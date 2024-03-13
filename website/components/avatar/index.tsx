@@ -3,10 +3,10 @@ import { useState } from "react";
 import AvatarButton from "./Button";
 import AvatarPopUpForm from "./popUpForm";
 import { userState } from "@/utils/userStates";
+import getCookie from "@/utils/getCookie";
 
 function Avatar() {
-  console.log(document.cookie)
-  const [userState, setUserState] = useState<userState>(document.cookie? 'logged in' : 'log in');
+  const [userState, setUserState] = useState<userState>(getCookie("token") ? userStates.LoggedIn : userStates.LogIn );
   const [showPopup, setShowPopup] = useState(false)
 
   const toggleShow = () => {

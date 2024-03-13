@@ -1,4 +1,5 @@
 import { exportedForTesting as openingTimesTests } from '@/components/openingTimes'
+import getCookie from '@/utils/getCookie';
 
 describe('testing openingTimes module', () => {
   const isOpen = openingTimesTests.isOpen;
@@ -36,5 +37,43 @@ describe('testing openingTimes module', () => {
 
   test('Should be closed on Wednesday 23:00', () => {
     expect(isOpen(new Date("2024-01-03T23:00:00"))).toBe(false);
+  });
+});
+
+describe('testing getCookie util', () => {
+  test('looking for "empty" in empty cookie should return undefined', () => {
+    expect(getCookie("", "")).toBe(undefined);
+  });
+
+  test('looking for "moo" in empty cookie should return undefined', () => {
+    expect(getCookie("moo", "")).toBe(undefined);
+  });
+
+  test('looking for "moo" in moo=cow cookie should return cow', () => {
+    expect(getCookie("moo", "moo=cow")).toBe("cow");
+  });
+
+  test('looking for "moo" in miaw=cat; moo=cow cookie should return cow', () => {
+    expect(getCookie("moo", "miaw=cat; moo=cow")).toBe("cow");
+  });
+
+  test('looking for "moo" in miaw=cat; moo=cow cookie should return cow', () => {
+    expect(getCookie("moo", ";miaw=cat; moo=cow;")).toBe("cow");
+  });
+
+  test('looking for "squeek" in miaw=cat; squeek=squirrel,mouse; moo=cow cookie should return squirrel,mouse', () => {
+    expect(getCookie("squeek", "miaw=cat; squeek=squirrel,mouse; moo=cow")).toBe("squirrel,mouse");
+  });
+ 
+  test('looking for "squeek" in miaw=cat; squeek=squirrel=mouse; moo=cow cookie should return squirrel=mouse', () => {
+    expect(getCookie("squeek", "miaw=cat; squeek=squirrel=mouse; moo=cow")).toBe("squirrel=mouse");
+  });
+ 
+  test('looking for "squeek" in miaw=cat;squeek=squirrel=mouse;moo=cow cookie should return squirrel=mouse', () => {
+    expect(getCookie("squeek", "miaw=cat;squeek=squirrel=mouse;moo=cow")).toBe("squirrel=mouse");
+  });
+ 
+  test('looking for "squeek" in miaw=cat; squeek=squirrel; squeek=mouse; moo=cow cookie should return squirrel', () => {
+    expect(getCookie("squeek", "miaw=cat; squeek=squirrel=mouse; moo=cow")).toBe("squirrel=mouse");
   });
 });

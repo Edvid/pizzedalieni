@@ -16,6 +16,7 @@ import LoginSubmit, { LoginAPIResponse } from './loginSubmit';
 import SignupSubmit from './signupSubmit';
 import PopupContainer from './popupcontainer';
 import { userState } from '../index';
+import setCookie from '@/utils/setCookie';
 
 interface IPopupForm {
   userState: userState;
