@@ -104,11 +104,6 @@ function LogIn(props: IPopupFormKind) {
       <APIRenderer logs={APILogs}/>
       <LoginSubmit data={inputs} onSubmit={onLoginSubmit}/>
       <div className="my-4 h-[1px] bg-gray-400"></div>
-      <p>Or Sign In With:</p>
-      <div>
-        <p>Goigle</p>
-      </div>
-      <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>No Account? Register</p>
       <button onClick={() => { props.onChangeUserState('sign up'); }} className="rounded-lg px-2 py-1 mt-2 bg-orange-500 hover:bg-transparent border-2 border-orange-500">here</button>
     </PopupContainer>
