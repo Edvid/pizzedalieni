@@ -2,6 +2,14 @@ import React, {ReactNode, useState} from 'react'
 
 import Input, { InputDictionary } from '@/components/input';
 import { ServerResponseRenderer as APIRenderer} from './serverresponserenderer';
+import LoginSubmit, { LoginAPIResponse } from './loginSubmit';
+import LogoutSubmit from './logoutSubmit';
+import SignupSubmit from './signupSubmit';
+import PopupContainer from './popupcontainer';
+import { userState, userStates } from '@/utils/userStates';
+import setCookie from '@/utils/setCookie';
+import getCookie from '@/utils/getCookie';
+import deleteCookie from '@/utils/deleteCookie';
 
 export interface Log {
   msg: string;
@@ -12,14 +20,6 @@ export interface CommonAPIResponse {
   logs: Log[]
 }
 
-import LoginSubmit, { LoginAPIResponse } from './loginSubmit';
-import LogoutSubmit from './logoutSubmit';
-import SignupSubmit from './signupSubmit';
-import PopupContainer from './popupcontainer';
-import { userState, userStates } from '@/utils/userStates';
-import setCookie from '@/utils/setCookie';
-import getCookie from '@/utils/getCookie';
-import deleteCookie from '@/utils/deleteCookie';
 
 interface IPopupForm {
   userState: userState;
