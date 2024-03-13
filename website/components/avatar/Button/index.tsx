@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, ReactNode } from 'react'
-import { userState } from '..'
+import { userState } from '@/utils/userStates'
 import getCookie from '@/utils/getCookie'
 
 function LogIn (props: { onClick: () => void }){

@@ -1,6 +1,6 @@
 import { ObjectValues } from './objectValues';
 
-const userStates = {
+export const userStates = {
   LogIn: 'log in',
   SignUp: 'sign up',
   LoggedIn: 'logged in'

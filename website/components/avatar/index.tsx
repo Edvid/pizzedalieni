@@ -2,7 +2,7 @@
 import { useState } from "react";
 import AvatarButton from "./Button";
 import AvatarPopUpForm from "./popUpForm";
-import { userState } from "@/utils/userStates";
+import { userState, userStates } from "@/utils/userStates";
 import getCookie from "@/utils/getCookie";
 
 function Avatar() {

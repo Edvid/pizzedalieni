@@ -15,7 +15,7 @@ export interface CommonAPIResponse {
 import LoginSubmit, { LoginAPIResponse } from './loginSubmit';
 import SignupSubmit from './signupSubmit';
 import PopupContainer from './popupcontainer';
-import { userState } from '../index';
+import { userState, userStates } from '@/utils/userStates';
 import setCookie from '@/utils/setCookie';
 
 interface IPopupForm {
@@ -55,7 +55,7 @@ function SignUp(props: IPopupFormKind) {
       <SignupSubmit data={inputs} onSubmit={onSignupSubmit}/>
       <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>Log in instead </p>
-      <button onClick={() => { props.onChangeUserState('log in'); }} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">here</button>
+      <button onClick={() => { props.onChangeUserState(userStates.LogIn); }} className="rounded-lg px-2 py-1 mt-2 bg-teal-500 hover:bg-transparent border-2 border-teal-500">here</button>
     </PopupContainer>
   )
 }
@@ -108,7 +108,7 @@ function LogIn(props: IPopupFormKind) {
       <LoginSubmit data={inputs} onSubmit={onLoginSubmit}/>
       <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>No Account? Register</p>
-      <button onClick={() => { props.onChangeUserState('sign up'); }} className="rounded-lg px-2 py-1 mt-2 bg-orange-500 hover:bg-transparent border-2 border-orange-500">here</button>
+      <button onClick={() => { props.onChangeUserState(userStates.SignUp); }} className="rounded-lg px-2 py-1 mt-2 bg-orange-500 hover:bg-transparent border-2 border-orange-500">here</button>
     </PopupContainer>
   )
 }
