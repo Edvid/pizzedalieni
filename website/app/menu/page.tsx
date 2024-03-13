@@ -15,34 +15,28 @@ interface Pizza {
 function PizzaRow (props: Pizza) {
   return (
     <div key={props.id} className='w-[60rem] mx-auto p-8 my-8 bg-zinc-600 rounded-lg'>
-      <table>
-        <tbody>
-          <tr>
-            <td>
-              <div>
-                <table>
-                  <tbody>
-                    <tr>
-                      <td className='pr-8'>
-                        {props.id}.
-                      </td>
-                      <td key={props.id}>
-                        {props.name}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <p className='text-zinc-400 italic first-letter:capitalize'>
-                  {props.ingredients.map((item, i) => (item + (i == props.ingredients.length - 1 ? "": ", ")))}
-                </p>
-              </div>
-            </td>
-            <td>
-              <AddIcon/>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div className='grid grid-cols-[1fr,3em]'>
+        <div>
+          <table>
+            <tbody>
+              <tr>
+                <td className='pr-8'>
+                  {props.id}.
+                </td>
+                <td key={props.id}>
+                  {props.name}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <p className='text-zinc-400 italic first-letter:capitalize'>
+            {props.ingredients.map((item, i) => (item + (i == props.ingredients.length - 1 ? "": ", ")))}
+          </p>
+        </div>
+        <div className='table m-auto '>
+          <AddIcon/>
+        </div>
+      </div>
     </div>
   )
 }
