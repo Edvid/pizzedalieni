@@ -1,7 +1,7 @@
 CREATE TABLE pizzas (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL UNIQUE,
-  image BYTEA
+  image VARCHAR
 );
 
 CREATE TABLE ingredients (
