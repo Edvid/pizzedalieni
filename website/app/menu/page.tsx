@@ -10,28 +10,28 @@ import { base64, ensureBase64 } from '@/utils/base64';
 interface Pizza {
   id: number;
   name: string;
+  price: string;
   ingredients: string[];
   image?: base64;
 }
 
 function PizzaRow (props: Pizza) {
   return (
-    <div key={props.id} className='w-[60rem] mx-auto p-8 my-8 bg-zinc-600 rounded-lg'>
+   <div key={props.id} className='w-full mx-auto p-8 my-8 bg-zinc-600 rounded-lg'>
       <div className='grid grid-cols-[6fr,1fr,3em]'>
-        <div>
-          <table>
-            <tbody>
-              <tr>
-                <td className='pr-8'>
-                  {props.id}.
-                </td>
-                <td key={props.id}>
-                  {props.name}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <p className='text-zinc-400 italic first-letter:capitalize'>
+        <div className='grid grid-cols-2 grid-rows-2'>
+          <div>
+            <span className='grid grid-cols-[3rem,1fr]'>
+              <p>
+                {props.id}.
+              </p>
+              <p>
+                {props.name}
+              </p>
+            </span>
+          </div>
+          <p className='text-orange-400 text-right mx-6 text-xl'>{props.price.slice(1)} Zorgons</p>
+          <p className='col-span-2 text-zinc-400 italic first-letter:capitalize'>
             {props.ingredients.map((item, i) => (item + (i == props.ingredients.length - 1 ? "": ", ")))}
           </p>
         </div>
@@ -71,14 +71,21 @@ export default function Menu() {
         <NavBar/>
       </header>
       <PageTitle>Menu</PageTitle>
-      {(pizzas).map(pizza => (
-        <PizzaRow
-          key={pizza.id}
-          id={pizza.id}
-          name={pizza.name}
-          ingredients={pizza.ingredients}
-          image={pizza.image}/>
-      ))}
+      <div className='grid grid-cols-[65%,35%] w-[85rem] m-auto'>
+        <section>
+          {(pizzas).map(pizza => (
+            <PizzaRow
+              key={pizza.id}
+              id={pizza.id}
+              name={pizza.name}
+              price={pizza.price}
+              ingredients={pizza.ingredients}
+              image={pizza.image}/>
+          ))}
+        </section>
+        <section className='relative'>
+        </section>
+      </div>
     </main>
   )
 }
