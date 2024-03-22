@@ -10,14 +10,14 @@ function BasketItem (props: IBasketItem) {
       <div className='flex'>
         <button
           className={buttonStyle + styles["material-symbols-outlined"]}
-          onClick={() => props.onAmountChange(props.itemId, -1)}
+          onClick={() => props.onAmountChange(-1)}
         >
           remove
         </button>
         <h3>{props.amount}</h3>
         <button
           className={buttonStyle + styles["material-symbols-outlined"]}
-          onClick={() => props.onAmountChange(props.itemId, 1)}
+          onClick={() => props.onAmountChange(1)}
         >
           add
         </button>
@@ -31,10 +31,10 @@ function BasketItem (props: IBasketItem) {
 }
 
 export default function Basket (props: IBasket) {
-  const updateContent = (itemId: number, amountChange: number) => {
-    let newContent: AddableItem[] = props.added.map( (item: AddableItem) =>
+  const updateContent = (index: number, amountChange: number) => {
+    let newContent: AddableItem[] = props.added.map( (item: AddableItem, i: number) =>
       {
-        if (item.itemId === itemId) {
+        if (i === index) {
           item.amount += amountChange;
         }
         return item;
@@ -53,7 +53,7 @@ export default function Basket (props: IBasket) {
           <>
             {
               props.added.map((item, i) => (
-                <BasketItem key={i} itemId={item.itemId} name={item.name} amount={item.amount} onAmountChange={updateContent}/>
+                <BasketItem key={i} itemId={item.itemId} name={item.name} amount={item.amount} onAmountChange={(amount) => updateContent(i, amount)}/>
               ))
             }
           </>

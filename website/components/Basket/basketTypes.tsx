@@ -31,5 +31,5 @@ export interface IBasket extends Content {
 }
 
 export interface IBasketItem extends AddableItem {
-  onAmountChange: (itemID: number, amountChange: number) => void;
+  onAmountChange: (amountChange: number) => void;
 }
