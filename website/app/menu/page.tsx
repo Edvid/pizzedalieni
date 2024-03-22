@@ -6,6 +6,7 @@ import PageTitle from '@/components/pageTitle'
 import AddIcon from '@/components/addIcon';
 import Image from 'next/image';
 import { base64, ensureBase64 } from '@/utils/base64';
+import Basket from '@/components/Basket';
 
 interface Pizza {
   id: number;
@@ -84,6 +85,7 @@ export default function Menu() {
           ))}
         </section>
         <section className='relative'>
+          <Basket/>
         </section>
       </div>
     </main>
