@@ -1,26 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './styles.module.scss';
+import { AddableItem, IBasket, IBasketItem } from './basketTypes';
 
-interface AddableItem {
-  itemId: number;
-  name?: string;
-  amount: number;
-}
-
-interface Extra extends AddableItem { }
-
-interface BasketAddable extends AddableItem {
-  extras?: Extra[];
-  notes?: string;
-}
-
-interface Content {
-  added: AddableItem[]
-}
-
-interface IBasketItem extends AddableItem {
-  onAmountChange: (itemId: number, amountChange: number) => void;
-}
 
 function BasketItem (props: IBasketItem) {
   const buttonStyle = "bg-zinc-200 rounded-lg mx-2 w-8 pointer hover:bg-zinc-400 ";
@@ -49,48 +30,47 @@ function BasketItem (props: IBasketItem) {
   )
 }
 
-function BasketContent() {
-  const [content, setContent] = useState<Content>({added: [{itemId: 123, name: "testPizza", amount: 1}]});
-
+export default function Basket (props: IBasket) {
   const updateContent = (itemId: number, amountChange: number) => {
-    setContent( {
-      added:
-      content.added.map( (item: AddableItem) =>
+    let newContent: AddableItem[] = props.added.map( (item: AddableItem) =>
       {
         if (item.itemId === itemId) {
           item.amount += amountChange;
         }
         return item;
-      }).filter((item) => item.amount > 0)
-    });
+      }).filter((item) => item.amount > 0);
+
+    props.onContentUpdated(newContent);
   }
 
-  if (content.added.length > 0) {
+  if (props.added.length > 0) {
     return (
-      <>
-        {
-          content.added.map((item, i) => (
-            <BasketItem key={i} itemId={item.itemId} name={item.name} amount={item.amount} onAmountChange={updateContent}/>
-          ))
-        }
-      </>
+      <div className='sticky top-6'>
+        <div className='rounded-lg bg-gray-800 m-8'>
+          <h2 className='text-2xl text-center p-4'>
+            Basket
+          </h2>
+          <>
+            {
+              props.added.map((item, i) => (
+                <BasketItem key={i} itemId={item.itemId} name={item.name} amount={item.amount} onAmountChange={updateContent}/>
+              ))
+            }
+          </>
+        </div>
+      </div>
     );
   } else {
     return (
-      <h3 className='text-center text-xl p-4 italic decoration-dotted'>Your basket is currently empty</h3>
+      <div className='sticky top-6'>
+        <div className='rounded-lg bg-gray-800 m-8'>
+          <h2 className='text-2xl text-center p-4'>
+            Basket
+          </h2>
+          <h3 className='text-center text-xl p-4 italic decoration-dotted'>Your basket is currently empty</h3>
+        </div>
+      </div>
     )
   }
 }
 
-export default function Basket () {
-  return (
-    <div className='sticky top-6'>
-      <div className='rounded-lg bg-gray-800 m-8'>
-        <h2 className='text-2xl text-center p-4'>
-          Basket
-        </h2>
-        <BasketContent/>
-      </div>
-    </div>
-  )
-}

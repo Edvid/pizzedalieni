@@ -5,16 +5,9 @@ import NavBar from '@/components/navBar'
 import PageTitle from '@/components/pageTitle'
 import AddIcon from '@/components/addIcon';
 import Image from 'next/image';
-import { base64, ensureBase64 } from '@/utils/base64';
+import { Pizza, AddableItem } from '@/components/Basket/basketTypes';
+import { ensureBase64 } from '@/utils/base64';
 import Basket from '@/components/Basket';
-
-interface Pizza {
-  id: number;
-  name: string;
-  price: string;
-  ingredients: string[];
-  image?: base64;
-}
 
 function PizzaRow (props: Pizza) {
   return (
@@ -44,15 +37,17 @@ function PizzaRow (props: Pizza) {
           width={80}/>
         </div>
         <div className='table m-auto '>
-          <AddIcon/>
+          <AddIcon onClick={() => props.onAdd()}/>
         </div>
       </div>
     </div>
   )
 }
 
+
 export default function Menu() {
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
+  const [ basketContent, setBasketContent ] = useState<AddableItem[]>([]);
 
   useEffect(() => {
     async function fetchPizzas() {
@@ -65,6 +60,12 @@ export default function Menu() {
 
     return () => { setPizzas([]) };
   }, [])
+
+  const addPizza = (pizza: Pizza) => {
+    let bc: AddableItem[] = basketContent.slice();
+    bc.push({itemId: pizza.id, name: pizza.name, amount: 1});
+    setBasketContent(bc);
+  }
 
   return (
     <main>
@@ -81,11 +82,12 @@ export default function Menu() {
               name={pizza.name}
               price={pizza.price}
               ingredients={pizza.ingredients}
-              image={pizza.image}/>
+              image={pizza.image}
+              onAdd={() => addPizza(pizza)} />
           ))}
         </section>
         <section className='relative'>
-          <Basket/>
+          <Basket added={basketContent} onContentUpdated={setBasketContent}/>
         </section>
       </div>
     </main>
