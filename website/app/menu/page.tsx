@@ -63,7 +63,7 @@ export default function Menu() {
 
   const addPizza = (pizza: Pizza) => {
     let bc: AddableItem[] = basketContent.slice();
-    bc.push({itemId: pizza.id, name: pizza.name, amount: 1});
+    bc.push({itemId: pizza.id, name: pizza.name, price: pizza.price, amount: 1});
     setBasketContent(bc);
   }
 
