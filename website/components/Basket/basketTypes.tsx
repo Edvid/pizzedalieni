@@ -1,4 +1,4 @@
-import { base64, ensureBase64 } from '@/utils/base64';
+import { base64 } from '@/utils/base64';
 
 export interface Pizza {
   id: number;
@@ -13,13 +13,6 @@ export interface AddableItem {
   itemId: number;
   name?: string;
   amount: number;
-}
-
-export interface Extra extends AddableItem { }
-
-interface BasketAddable extends AddableItem {
-  extras?: Extra[];
-  notes?: string;
 }
 
 export interface Content {
