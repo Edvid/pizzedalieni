@@ -6,7 +6,7 @@ export interface Pizza {
   price: string;
   ingredients: string[];
   image?: base64;
-  onAdd: (arg0: Pizza) => void;
+  onAdd: () => void;
 }
 
 export interface AddableItem {
