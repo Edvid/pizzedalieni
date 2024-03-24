@@ -57,9 +57,16 @@ export default function Menu() {
         .then(data => setPizzas(data));
     }
 
-    async function fetchBasketOfUser(user?: string){
-      if(typeof user !== "undefined") {
-        setBasketContent([{itemId: 500, name: "temp loaded pizzas", price: "$1.00", amount: 1}]);
+    async function fetchBasketOfUser(token?: string){
+      if(typeof token !== "undefined") {
+        await fetch(process.env.NEXT_PUBLIC_API_URL + "/userbasket/get",{
+          headers: {
+            "Content-Type": "application/json",
+            "token": token
+          },
+        }).then(response => response.json() )
+        .then(response => response as AddableItem[])
+        .then(response => setBasketContent(response));
       }
     }
 
@@ -68,6 +75,27 @@ export default function Menu() {
 
     return () => { setPizzas([]) };
   }, [])
+
+  useEffect(() => {
+    async function postPizzas(token?: string) {
+      if (typeof token === "undefined") return;
+      const data: {basketContent: AddableItem[]} =
+        {
+          basketContent: basketContent
+        }
+
+      fetch(process.env.NEXT_PUBLIC_API_URL + "/userbasket/set",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "token": token,
+        },
+        body: JSON.stringify(data)
+      })
+    }
+
+    postPizzas(getCookie("token"));
+  }, [basketContent])
 
   const addPizza = (pizza: Pizza) => {
     let bc: AddableItem[] = basketContent.slice();

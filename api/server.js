@@ -17,7 +17,6 @@ const app = express();
 const port = 3001;
 
 const jsonParser = bodyParser.json();
-const urlencodedParser = bodyParser.urlencoded({ extended: false});
 
 function dbErrorTranslator(str) {
   const matchobj = [
@@ -226,6 +225,29 @@ app.post('/logout', jsonParser, async (request, response) => {
   response.send({logs: [{msg: "logout permitted", kind: "ok"}]});
 })
 
+
+app.get('/userbasket/get', async (request, response) => {
+  const { token } = request.headers;
+  console.log(request.headers);
+  console.log(jwt.decode(token));
+  const { userID } = jwt.decode(token);
+  let pizzas = [];
+
+  await db.many("select * from user_addedinbasket_get(${userid})", {
+    userid: userID
+  })
+  .then(data => data.forEach(e => {
+    const pizza = {
+      itemId: e.id,
+      name: e.name,
+      price: e.price,
+      amount: e.amount
+    }
+    pizzas.push(pizza);
+  }));
+
+  response.send(pizzas);
+});
 app.listen(port, () => {
   console.log(`Server up and running at http://localhost:${port}`);
 });

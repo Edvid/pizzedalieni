@@ -11,9 +11,9 @@ CREATE TABLE ingredients (
 );
 
 CREATE TABLE pizza_ingredients (
-  pizza_id int REFERENCES pizzas(id),
-  ingredient_id int REFERENCES ingredients(id),
-  CONSTRAINT PK PRIMARY KEY (pizza_id, ingredient_id)
+  pizza_id INT REFERENCES pizzas(id),
+  ingredient_id INT REFERENCES ingredients(id),
+  PRIMARY KEY (pizza_id, ingredient_id)
 );
 
 CREATE TABLE accounts (
@@ -22,6 +22,18 @@ CREATE TABLE accounts (
   last_name VARCHAR(80),
   email VARCHAR(254) UNIQUE,
   password CHAR(60)
+);
+
+CREATE TABLE addables (
+  id SERIAL PRIMARY KEY,
+  pizza_id INT,
+  amount INT
+);
+
+CREATE TABLE account_addables (
+  account_id INT REFERENCES accounts(id),
+  addable_id INT REFERENCES addables(id),
+  PRIMARY KEY (account_id, addable_id)
 );
 
 INSERT INTO pizzas (name, price, image) VALUES
@@ -127,3 +139,18 @@ $$
   LIMIT 1
 $$
 LANGUAGE SQL;
+
+CREATE FUNCTION user_addedinbasket_get(userid int)
+RETURNS TABLE (id INT, name VARCHAR(50), price MONEY, amount INT)
+LANGUAGE SQL
+AS
+$$
+  SELECT pizzas.id as id, name, price, amount
+  FROM account_addables
+  INNER JOIN addables
+  ON account_addables.addable_id=addables.id
+  INNER JOIN pizzas
+  ON addables.id=pizzas.id
+  WHERE account_addables.account_id=userid
+$$;
+
