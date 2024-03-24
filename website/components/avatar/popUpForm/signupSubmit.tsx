@@ -19,7 +19,7 @@ async function signUp(inputs: InputDictionary): Promise<SignupAPIResponse> {
       if (inputs[k]) data[k] = v;
     }
 
-    return await fetch("http://localhost:3001/signup",{
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + "/signup",{
       method: "POST",
       headers: {
         "Content-Type": "application/json",

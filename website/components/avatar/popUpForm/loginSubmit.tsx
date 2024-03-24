@@ -23,7 +23,7 @@ async function logIn(inputs: InputDictionary): Promise<LoginAPIResponse> {
       if (inputs[k]) data[k] = v;
     }
 
-    return await fetch("http://localhost:3001/login",{
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + "/login",{
       method: "POST",
       headers: {
         "Content-Type": "application/json",

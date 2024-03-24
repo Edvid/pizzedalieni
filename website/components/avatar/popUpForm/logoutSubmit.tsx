@@ -10,7 +10,7 @@ async function logOut(token: string): Promise<LogoutAPIResponse> {
     var data: InputDictionary = {
       token: token,
     };
-    return await fetch("http://localhost:3001/logout",{
+    return await fetch(process.env.NEXT_PUBLIC_API_URL + "/logout",{
       method: "POST",
       headers: {
         "Content-Type": "application/json",
