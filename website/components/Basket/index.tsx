@@ -32,10 +32,10 @@ function BasketItem (props: IBasketItem) {
 
 function BasketTotal (props: {totalPrice: string}) {
   return (
-    <div className='grid m-2 grid-cols-[6rem,1fr,5rem]'>
-      <div>
+    <div className='grid m-2 grid-cols-[7rem,1fr,5rem]'>
+      <div className='mx-2'>
         <button
-          className={ "bg-green-400 rounded-lg mx-2 w-full pointer hover:bg-green-300 " + styles["material-symbols-outlined"] }
+          className={ "bg-green-400 rounded-lg w-full pointer hover:bg-green-300 " + styles["material-symbols-outlined"] }
           onClick={() => 0}
         >
           shopping_cart_checkout
