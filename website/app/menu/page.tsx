@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { Pizza, AddableItem } from '@/components/Basket/basketTypes';
 import { ensureBase64 } from '@/utils/base64';
 import Basket from '@/components/Basket';
+import getCookie from '@/utils/getCookie';
 
 function PizzaRow (props: Pizza) {
   return (
@@ -56,7 +57,14 @@ export default function Menu() {
         .then(data => setPizzas(data));
     }
 
+    async function fetchBasketOfUser(user?: string){
+      if(typeof user !== "undefined") {
+        setBasketContent([{itemId: 500, name: "temp loaded pizzas", price: "$1.00", amount: 1}]);
+      }
+    }
+
     fetchPizzas();
+    fetchBasketOfUser(getCookie("token"));
 
     return () => { setPizzas([]) };
   }, [])
