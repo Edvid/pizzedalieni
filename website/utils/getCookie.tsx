@@ -1,7 +1,15 @@
-export default function getCookie (str: string, cookie?: string): string | undefined {
-  return (cookie ? cookie : document.cookie)
+function getFromSemicolonSeperatedString (searchString: string, SemicolonSeperatedString: string): string {
+  return SemicolonSeperatedString
     .split(/; ?/)
-    .filter((s) => s !== "")
-    .filter((s) => s.startsWith(str + "="))
-    .map((s) => s.substring(str.length + 1, s.length))[0];
+    .filter((semStr) => semStr !== "")
+    .filter((semStr) => semStr.startsWith(searchString + "="))
+    .map((semStr) => semStr.substring(searchString.length + 1, semStr.length))[0];
+}
+
+export default function getCookie (str: string): string | undefined {
+  return getFromSemicolonSeperatedString(str, document.cookie);
+}
+
+export const exportedForTesting = {
+  getFromSemicolonSeperatedString
 }

@@ -1,5 +1,5 @@
 import { exportedForTesting as openingTimesTests } from '@/components/openingTimes'
-import getCookie from '@/utils/getCookie';
+import { exportedForTesting as getCookieTest } from '@/utils/getCookie';
 
 describe('testing openingTimes module', () => {
   const isOpen = openingTimesTests.isOpen;
@@ -41,6 +41,7 @@ describe('testing openingTimes module', () => {
 });
 
 describe('testing getCookie util', () => {
+  const getCookie = getCookieTest.getFromSemicolonSeperatedString;
   test('looking for "empty" in empty cookie should return undefined', () => {
     expect(getCookie("", "")).toBe(undefined);
   });
