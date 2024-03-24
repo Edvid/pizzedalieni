@@ -41,7 +41,7 @@ function BasketTotal (props: {totalPrice: string}) {
           shopping_cart_checkout
         </button>
       </div>
-      <p></p>
+      <p className='ml-8 font-black'>Total</p>
       <p className='text-orange-500'>{props.totalPrice} Ƶ </p>
     </div>
   )
