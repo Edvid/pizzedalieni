@@ -5,10 +5,12 @@ import NavBar from '@/components/navBar'
 import PageTitle from '@/components/pageTitle'
 import AddIcon from '@/components/addIcon';
 import Image from 'next/image';
-import { Pizza, AddableItem } from '@/components/Basket/basketTypes';
+import { Pizza, AddableItem } from '@/utils/basket/types';
 import { ensureBase64 } from '@/utils/base64';
 import Basket from '@/components/Basket';
 import getCookie from '@/utils/getCookie';
+import fetchBasketOfUser from '@/utils/basket/fetchBasketOfUser';
+import setBasketCookie from '@/utils/basket/setBasketCookie';
 
 function PizzaRow (props: Pizza) {
   return (
@@ -57,21 +59,9 @@ export default function Menu() {
         .then(data => setPizzas(data));
     }
 
-    async function fetchBasketOfUser(token?: string){
-      if(typeof token !== "undefined") {
-        await fetch(process.env.NEXT_PUBLIC_API_URL + "/userbasket/get",{
-          headers: {
-            "Content-Type": "application/json",
-            "token": token
-          },
-        }).then(response => response.json() )
-        .then(response => response as AddableItem[])
-        .then(response => setBasketContent(response));
-      }
-    }
-
     fetchPizzas();
-    fetchBasketOfUser(getCookie("token"));
+    fetchBasketOfUser()
+      .then(returnedContent => setBasketContent(returnedContent));
 
     return () => { setPizzas([]) };
   }, [])
