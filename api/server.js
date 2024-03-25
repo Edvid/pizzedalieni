@@ -225,6 +225,9 @@ app.post('/logout', jsonParser, async (request, response) => {
   response.send({logs: [{msg: "logout permitted", kind: "ok"}]});
 })
 
+app.post('/userbasket/set', jsonParser, async (request, response) => {
+})
+
 
 app.get('/userbasket/get', async (request, response) => {
   const { token } = request.headers;

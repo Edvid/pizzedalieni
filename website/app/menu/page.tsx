@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import NavBar from '@/components/navBar'
 import PageTitle from '@/components/pageTitle'
@@ -52,6 +52,10 @@ export default function Menu() {
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
   const [ basketContent, setBasketContent ] = useState<AddableItem[]>([]);
 
+  let postPizzasTimer = useRef<number>(0);
+  let havePostedPizzas = useRef<boolean>(false);
+  let postPizzaIntervalFunc = useRef<number>(-1);
+
   useEffect(() => {
     async function fetchPizzas() {
       fetch(process.env.NEXT_PUBLIC_API_URL + "/pizzas")
@@ -67,24 +71,40 @@ export default function Menu() {
   }, [])
 
   useEffect(() => {
-    async function postPizzas(token?: string) {
-      if (typeof token === "undefined") return;
-      const data: {basketContent: AddableItem[]} =
-        {
-          basketContent: basketContent
-        }
 
-      fetch(process.env.NEXT_PUBLIC_API_URL + "/userbasket/set",{
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "token": token,
-        },
-        body: JSON.stringify(data)
-      })
+  async function postPizzas(token?: string) {
+    if (typeof token === "undefined") return;
+    const data: {basketContent: AddableItem[]} =
+      {
+        basketContent: basketContent
+      }
+
+    fetch(process.env.NEXT_PUBLIC_API_URL + "/userbasket/set",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "token": token,
+      },
+      body: JSON.stringify(data)
+    })
+  }
+    function updateBasketCookie(){
+      setBasketCookie(basketContent);
+
+      postPizzasTimer.current = 0;
+      havePostedPizzas.current = false;
+
+      if(postPizzaIntervalFunc.current === -1){
+      postPizzaIntervalFunc.current = setInterval(() => {
+          if (postPizzasTimer.current >= 1500 && !havePostedPizzas.current) {
+            postPizzas(getCookie("token"));
+            havePostedPizzas.current = true;
+          }
+          postPizzasTimer.current += 100;
+        }, 100, [])}
     }
 
-    postPizzas(getCookie("token"));
+    updateBasketCookie();
   }, [basketContent])
 
   const addPizza = (pizza: Pizza) => {
