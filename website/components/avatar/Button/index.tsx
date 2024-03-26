@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import { userState } from '@/utils/userStates'
-import getCookie from '@/utils/getCookie'
+import getCookie from '@/utils/cookie/getCookie'
 
 function LogIn (props: { onClick: () => void }){
   return (

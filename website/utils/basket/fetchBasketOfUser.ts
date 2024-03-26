@@ -1,4 +1,4 @@
-import getCookie from "../getCookie";
+import getCookie from "../cookie/getCookie";
 import setBasketCookie from "./setBasketCookie";
 import { AddableItem } from "./types";
 

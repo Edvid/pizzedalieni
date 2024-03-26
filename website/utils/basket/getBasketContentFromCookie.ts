@@ -1,4 +1,4 @@
-import getCookie from "../getCookie";
+import getCookie from "../cookie/getCookie";
 import { AddableItem } from "./types";
 
 export default function getBasketContentFromCookie(): AddableItem[] {

@@ -1,5 +1,5 @@
 import { exportedForTesting as openingTimesTests } from '@/components/openingTimes'
-import { exportedForTesting as getCookieTest } from '@/utils/getCookie';
+import { exportedForTesting as getCookieTest } from '@/utils/cookie/getCookie';
 
 describe('testing openingTimes module', () => {
   const isOpen = openingTimesTests.isOpen;

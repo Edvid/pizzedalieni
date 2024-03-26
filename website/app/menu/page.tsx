@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { Pizza, AddableItem } from '@/utils/basket/types';
 import { ensureBase64 } from '@/utils/base64';
 import Basket from '@/components/Basket';
-import getCookie from '@/utils/getCookie';
+import getCookie from '@/utils/cookie/getCookie';
 import fetchBasketOfUser from '@/utils/basket/fetchBasketOfUser';
 import setBasketCookie from '@/utils/basket/setBasketCookie';
 import getBasketContentFromCookie from '@/utils/basket/getBasketContentFromCookie';

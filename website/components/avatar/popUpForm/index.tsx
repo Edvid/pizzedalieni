@@ -7,9 +7,9 @@ import LogoutSubmit from './logoutSubmit';
 import SignupSubmit from './signupSubmit';
 import PopupContainer from './popupcontainer';
 import { userState, userStates } from '@/utils/userStates';
-import setCookie from '@/utils/setCookie';
-import getCookie from '@/utils/getCookie';
-import deleteCookie from '@/utils/deleteCookie';
+import setCookie from '@/utils/cookie/setCookie';
+import getCookie from '@/utils/cookie/getCookie';
+import deleteCookie from '@/utils/cookie/deleteCookie';
 
 export interface Log {
   msg: string;

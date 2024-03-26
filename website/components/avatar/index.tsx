@@ -3,7 +3,7 @@ import { useState } from "react";
 import AvatarButton from "./Button";
 import AvatarPopUpForm from "./popUpForm";
 import { userState, userStates } from "@/utils/userStates";
-import getCookie from "@/utils/getCookie";
+import getCookie from "@/utils/cookie/getCookie";
 
 function Avatar() {
   const [userState, setUserState] = useState<userState>(getCookie("token") ? userStates.LoggedIn : userStates.LogIn );
