@@ -11,6 +11,7 @@ import Basket from '@/components/Basket';
 import getCookie from '@/utils/getCookie';
 import fetchBasketOfUser from '@/utils/basket/fetchBasketOfUser';
 import setBasketCookie from '@/utils/basket/setBasketCookie';
+import getBasketContentFromCookie from '@/utils/basket/getBasketContentFromCookie';
 
 function PizzaRow (props: Pizza) {
   return (
@@ -54,7 +55,7 @@ export default function Menu() {
 
   let postPizzasTimer = useRef<number>(0);
   let havePostedPizzas = useRef<boolean>(false);
-  let postPizzaIntervalFunc = useRef<number>(-1);
+  let postPizzaIntervalFunc = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     async function fetchPizzas() {
@@ -72,36 +73,37 @@ export default function Menu() {
 
   useEffect(() => {
 
-  async function postPizzas(token?: string) {
-    if (typeof token === "undefined") return;
-    const data: {basketContent: AddableItem[]} =
-      {
-        basketContent: basketContent
-      }
+    async function postPizzas(token?: string) {
+      if (typeof token === "undefined") return;
+      const data: {basketContent: AddableItem[]} =
+        {
+          basketContent: getBasketContentFromCookie()
+        }
 
-    fetch(process.env.NEXT_PUBLIC_API_URL + "/userbasket/set",{
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "token": token,
-      },
-      body: JSON.stringify(data)
-    })
-  }
+      fetch(process.env.NEXT_PUBLIC_API_URL + "/userbasket/set",{
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "token": token,
+        },
+        body: JSON.stringify(data)
+      })
+    }
+
     function updateBasketCookie(){
       setBasketCookie(basketContent);
 
       postPizzasTimer.current = 0;
       havePostedPizzas.current = false;
 
-      if(postPizzaIntervalFunc.current === -1){
-      postPizzaIntervalFunc.current = setInterval(() => {
+      if(postPizzaIntervalFunc.current === undefined){
+        postPizzaIntervalFunc.current = setInterval(() => {
           if (postPizzasTimer.current >= 1500 && !havePostedPizzas.current) {
             postPizzas(getCookie("token"));
             havePostedPizzas.current = true;
           }
           postPizzasTimer.current += 100;
-        }, 100, [])}
+        }, 100)}
     }
 
     updateBasketCookie();

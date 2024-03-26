@@ -26,14 +26,9 @@ CREATE TABLE accounts (
 
 CREATE TABLE addables (
   id SERIAL PRIMARY KEY,
+  account_id INT REFERENCES accounts(id),
   pizza_id INT,
   amount INT
-);
-
-CREATE TABLE account_addables (
-  account_id INT REFERENCES accounts(id),
-  addable_id INT REFERENCES addables(id),
-  PRIMARY KEY (account_id, addable_id)
 );
 
 INSERT INTO pizzas (name, price, image) VALUES
@@ -140,17 +135,34 @@ $$
 $$
 LANGUAGE SQL;
 
+CREATE PROCEDURE user_addedinbasket_clear(userid int)
+LANGUAGE SQL
+AS
+$$
+  DELETE FROM addables
+  WHERE account_id = userid;
+$$;
+
 CREATE FUNCTION user_addedinbasket_get(userid int)
 RETURNS TABLE (id INT, name VARCHAR(50), price MONEY, amount INT)
 LANGUAGE SQL
 AS
 $$
   SELECT pizzas.id as id, name, price, amount
-  FROM account_addables
-  INNER JOIN addables
-  ON account_addables.addable_id=addables.id
+  FROM addables
   INNER JOIN pizzas
-  ON addables.id=pizzas.id
-  WHERE account_addables.account_id=userid
+  ON addables.pizza_id=pizzas.id
+  WHERE addables.account_id=userid
+$$;
+
+CREATE PROCEDURE user_addedinbasket_set(userid int, pizzaid int, pizzaamount int)
+LANGUAGE SQL
+AS
+$$
+  INSERT INTO addables ( account_id, pizza_id, amount) VALUES (
+    userid,
+    pizzaid,
+    pizzaamount
+  );
 $$;
 

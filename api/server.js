@@ -211,17 +211,31 @@ app.post('/logout', jsonParser, async (request, response) => {
 })
 
 app.post('/userbasket/set', jsonParser, async (request, response) => {
+  const { token } = request.headers;
+  const { basketContent } = request.body;
+  const { userID } = jwt.decode(token);
+  console.log(JSON.stringify(basketContent));
+  await db.none("call user_addedinbasket_clear(${userid})", {
+    userid: userID,
+  });
+  // I don't think stored procedures can handle arrays
+  // Handle this with a loop
+  basketContent.forEach(item => {
+    db.none("call user_addedinbasket_set(${userid}, ${pizzaid}, ${pizzaamount})", {
+      userid: userID,
+      pizzaid: item.itemId,
+      pizzaamount: item.amount
+    });
+  });
 })
 
 
 app.get('/userbasket/get', async (request, response) => {
   const { token } = request.headers;
-  console.log(request.headers);
-  console.log(jwt.decode(token));
   const { userID } = jwt.decode(token);
   let pizzas = [];
 
-  await db.many("select * from user_addedinbasket_get(${userid})", {
+  await db.manyOrNone("select * from user_addedinbasket_get(${userid})", {
     userid: userID
   })
   .then(data => data.forEach(e => {
