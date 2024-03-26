@@ -104,21 +104,6 @@ Did you use the correct email?`,
 
 let sco;
 db.connect()
-  .then(obj => {
-    sco = obj;
-    return sco.any('SELECT * FROM Users');
-  })
-  .then(data => {
-    
-  })
-  .catch(err => {
-    
-  })
-  .finally(() => {
-    if (sco) {
-      sco.done();
-    }
-  })
 
 app.get('/', (request, response) => {
   response.send('Hello World!');
