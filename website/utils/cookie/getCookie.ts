@@ -1,3 +1,5 @@
+import getCookiePermission from "./getCookiePermission";
+
 function getFromSemicolonSeperatedString (searchString: string, SemicolonSeperatedString: string): string {
   return SemicolonSeperatedString
     .split(/; ?/)
@@ -7,6 +9,13 @@ function getFromSemicolonSeperatedString (searchString: string, SemicolonSeperat
 }
 
 export default function getCookie (str: string): string | undefined {
+  if (getCookiePermission()) {
+    return getCookieUnchecked(str);
+  }
+  return undefined;
+}
+
+function getCookieUnchecked(str: string): string | undefined {
   return getFromSemicolonSeperatedString(str, document.cookie);
 }
 

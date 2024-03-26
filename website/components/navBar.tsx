@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Avatar from '@/components/avatar'
 import { MenuItems } from '@/components/menuItems';
+import CookieAccept from '@/components/cookieAccept';
 
 function Logo() {
   return (
@@ -23,15 +24,20 @@ export const menuItem: ImenuItem[] = [
 
 function NavBar() {
   return (
-    <div className='bg-gradient-to-t from-purple-900 from-5% to-transparent to-20%'>
-      <div className='p-8 w-[60%] grid grid-cols-2 mx-auto'>
-        <Logo/>
-        <div className='flex justify-end space-x-20'>
-          <MenuItems/>
-          <Avatar/>
+    <>
+      <div className='fixed w-[100vw] bg-gradient-to-t from-purple-900 from-5% to-transparent to-20%'>
+        <div className='p-8 w-[60%] grid grid-cols-2 mx-auto'>
+          <Logo/>
+          <div className='flex justify-end space-x-20'>
+            <MenuItems/>
+            <Avatar/>
+          </div>
         </div>
       </div>
-    </div>
+      <div className='p-8 h-[6rem]'>
+      </div>
+      <CookieAccept/>
+    </>
   )
 }
 
