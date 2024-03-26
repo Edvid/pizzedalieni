@@ -68,7 +68,10 @@ export default function Menu() {
     fetchBasketOfUser()
       .then(returnedContent => setBasketContent(returnedContent));
 
-    return () => { setPizzas([]) };
+    return () => { 
+      setPizzas([])
+      setBasketContent([]);
+    };
   }, [])
 
   useEffect(() => {
@@ -107,6 +110,13 @@ export default function Menu() {
     }
 
     updateBasketCookie();
+
+    return () => {
+      postPizzasTimer.current = 0;
+      havePostedPizzas.current = false;
+      postPizzaIntervalFunc.current = undefined
+    }
+
   }, [basketContent])
 
   const addPizza = (pizza: Pizza) => {
