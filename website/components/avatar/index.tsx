@@ -14,7 +14,9 @@ function Avatar() {
   }
 
   function changeKind(newUserState: userState){
+    setShowPopup(false);
     setUserState(newUserState);
+    window.location.reload();
   }
 
   return (
