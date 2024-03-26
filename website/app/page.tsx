@@ -11,7 +11,7 @@ export default function Home() {
       <header>
         <NavBar/>
       </header>
-      <div className='py-12'>
+      <div className='py-8'>
         <table className='m-auto max-w-[min(70rem,60%)]'>
           <tbody>
             <tr>
