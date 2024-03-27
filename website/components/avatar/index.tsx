@@ -5,6 +5,10 @@ import AvatarPopUpForm from "./popUpForm";
 import { userState, userStates } from "@/utils/userStates";
 import getCookie from "@/utils/cookie/getCookie";
 
+function xor(a: boolean, b: boolean): boolean {
+  return a && !b || !a && b;
+}
+
 function Avatar() {
   const [userState, setUserState] = useState<userState>(getCookie("token") ? userStates.LoggedIn : userStates.LogIn );
   const [showPopup, setShowPopup] = useState(false)
@@ -14,9 +18,16 @@ function Avatar() {
   }
 
   function changeKind(newUserState: userState){
-    setShowPopup(false);
+    const before: userState = userState;
+    const shouldReload: boolean = xor(
+      newUserState === userStates.LoggedIn,
+      before === userStates.LoggedIn
+    );
     setUserState(newUserState);
-    window.location.reload();
+    if (shouldReload) {
+      setShowPopup(false);
+      window.location.reload();
+    }
   }
 
   return (
