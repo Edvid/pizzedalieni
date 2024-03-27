@@ -213,8 +213,7 @@ app.post('/logout', jsonParser, async (request, response) => {
 app.post('/userbasket/set', jsonParser, async (request, response) => {
   const { token } = request.headers;
   const { basketContent } = request.body;
-  const { userID } = jwt.decode(token);
-  console.log(JSON.stringify(basketContent));
+  const { userID } = jwt.verify(token, process.env.JWT_SECRET);
   await db.none("call user_addedinbasket_clear(${userid})", {
     userid: userID,
   });
@@ -232,7 +231,7 @@ app.post('/userbasket/set', jsonParser, async (request, response) => {
 
 app.get('/userbasket/get', async (request, response) => {
   const { token } = request.headers;
-  const { userID } = jwt.decode(token);
+  const { userID } = jwt.verify(token, process.env.JWT_SECRET);
   let pizzas = [];
 
   await db.manyOrNone("select * from user_addedinbasket_get(${userid})", {
