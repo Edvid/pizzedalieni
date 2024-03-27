@@ -15,6 +15,6 @@ export default async function fetchBasketOfUser(): Promise<AddableItem[]> {
       .then(response => { setBasketCookie(response); return response as AddableItem[] })
   }
   else {
-    return []
+    throw `token was ${typeof token}`;
   }
   }

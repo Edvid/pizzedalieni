@@ -56,6 +56,7 @@ export default function Menu() {
   let postPizzasTimer = useRef<number>(0);
   let havePostedPizzas = useRef<boolean>(false);
   let postPizzaIntervalFunc = useRef<NodeJS.Timeout>();
+  let StillFetchingBasket = useRef<boolean>(true);
 
   useEffect(() => {
     async function fetchPizzas() {
@@ -66,7 +67,9 @@ export default function Menu() {
 
     fetchPizzas();
     fetchBasketOfUser()
-      .then(returnedContent => setBasketContent(returnedContent));
+      .then(returnedContent => setBasketContent(returnedContent))
+      .catch((e) => {if (e === "token was undefined") { setBasketContent(getBasketContentFromCookie()) }})
+      .finally(() => StillFetchingBasket.current = false);
 
     return () => { 
       setPizzas([])
@@ -109,7 +112,9 @@ export default function Menu() {
         }, 100)}
     }
 
-    updateBasketCookie();
+    if (!StillFetchingBasket.current) {
+      updateBasketCookie();
+    }
 
     return () => {
       postPizzasTimer.current = 0;
