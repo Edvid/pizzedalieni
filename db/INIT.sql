@@ -1,7 +1,7 @@
 CREATE TABLE pizzas (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL UNIQUE,
-  price MONEY,
+  price MONEY NOT NULL,
   image VARCHAR
 );
 
@@ -11,24 +11,24 @@ CREATE TABLE ingredients (
 );
 
 CREATE TABLE pizza_ingredients (
-  pizza_id INT REFERENCES pizzas(id),
-  ingredient_id INT REFERENCES ingredients(id),
+  pizza_id INT NOT NULL REFERENCES pizzas(id),
+  ingredient_id INT NOT NULL REFERENCES ingredients(id),
   PRIMARY KEY (pizza_id, ingredient_id)
 );
 
 CREATE TABLE accounts (
   id SERIAL PRIMARY KEY,
-  first_name VARCHAR(80),
-  last_name VARCHAR(80),
-  email VARCHAR(254) UNIQUE,
-  password CHAR(60)
+  first_name VARCHAR(80) NOT NULL,
+  last_name VARCHAR(80) NOT NULL,
+  email VARCHAR(254) NOT NULL UNIQUE,
+  password CHAR(60) NOT NULL
 );
 
 CREATE TABLE addables (
   id SERIAL PRIMARY KEY,
-  account_id INT REFERENCES accounts(id),
-  pizza_id INT,
-  amount INT
+  account_id INT NOT NULL REFERENCES accounts(id),
+  pizza_id INT NOT NULL,
+  amount INT NOT NULL
 );
 
 INSERT INTO pizzas (name, price, image) VALUES
