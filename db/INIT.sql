@@ -18,6 +18,7 @@ CREATE TABLE pizza_ingredients (
 
 CREATE TABLE accounts (
   id SERIAL PRIMARY KEY,
+  last_login TIMESTAMP WITH TIME ZONE NOT NULL,
   first_name VARCHAR(80) NOT NULL,
   last_name VARCHAR(80) NOT NULL,
   email VARCHAR(254) NOT NULL UNIQUE,
@@ -108,21 +109,32 @@ $$
 $$
 LANGUAGE SQL;
 
+CREATE PROCEDURE update_last_login(userid int)
+LANGUAGE SQL
+AS
+$$
+  UPDATE accounts
+  SET last_login = NOW()::timestamp
+  WHERE id = userid
+$$;
+
 CREATE PROCEDURE sign_up(firn VARCHAR, lasn VARCHAR, em VARCHAR, pw CHAR)
 LANGUAGE SQL
 AS
 $$
   INSERT INTO accounts (
+    last_login,
     first_name,
     last_name,
     email,
     password
   ) VALUES (
+    NOW()::timestamp,
     firn,
     lasn,
     LOWER(em),
     pw
-  )
+  );
 $$;
 
 CREATE FUNCTION get_user_via_email(em VARCHAR)

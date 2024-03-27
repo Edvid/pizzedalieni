@@ -193,6 +193,11 @@ app.post('/login', jsonParser, async (request, response) => {
         expiresIn: '15m',
       }
     );
+
+    await db.none("call update_last_login(${userid})", {
+      userid: user.id,
+    });
+
     response.send({logs: [validateUserLog], token: token, userInfo: { firstname: user.first_name }});
   }else {
     response.send({logs: [validateUserLog]});
@@ -226,6 +231,9 @@ app.post('/userbasket/set', jsonParser, async (request, response) => {
       pizzaamount: item.amount
     });
   });
+  await db.none("call update_last_login(${userid})", {
+    userid: userID,
+  });
 })
 
 
@@ -246,6 +254,10 @@ app.get('/userbasket/get', async (request, response) => {
     }
     pizzas.push(pizza);
   }));
+
+  await db.none("call update_last_login(${userid})", {
+    userid: userID,
+  });
 
   response.send(pizzas);
 });
