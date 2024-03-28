@@ -178,3 +178,11 @@ $$
   );
 $$;
 
+CREATE PROCEDURE clear_old_users()
+LANGUAGE SQL
+AS
+$$
+  DELETE FROM accounts
+  WHERE last_login < (NOW() - INTERVAL '24 hours')::timestamp;
+$$;
+

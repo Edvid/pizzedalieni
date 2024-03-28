@@ -15,6 +15,17 @@ services:
     networks:
       - frontend
       - backend
+  cronjob:
+    build:
+      context: cronjob
+      args:
+        DB_PASSWORD: ${DB_PASSWD}
+      dockerfile: ./Dockerfile
+    depends_on:
+      - db
+    restart: always
+    networks:
+      - backend
   db:
     build:
       context: db
