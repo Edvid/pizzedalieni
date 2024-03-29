@@ -25,7 +25,7 @@ export const menuItem: ImenuItem[] = [
 function NavBar() {
   return (
     <>
-      <div className='fixed w-[100vw] bg-gradient-to-t from-purple-900 from-5% to-transparent to-20%'>
+      <div className='fixed w-[100vw] bg-gradient-to-t from-purple-900 from-5% to-black to-20% z-50'>
         <div className='p-8 w-[60%] grid grid-cols-2 mx-auto'>
           <Logo/>
           <div className='flex justify-end space-x-20'>

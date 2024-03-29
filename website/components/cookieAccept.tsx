@@ -20,7 +20,7 @@ export default function CookieAccept () {
 
   if(show) {
     return (
-      <div className="m-2 p-8 fixed z-20 bg-zinc-500 rounded-lg w-[40rem]">
+      <div className="m-2 p-8 fixed bg-zinc-500 rounded-lg w-[40rem]">
         <p>
           Hello! This website is a portfolio project for me to land a job. The site uses a few cookies for essential functionality. None of them are tracking cookies. If you do not accept, we won't go behind your back and make use of the necessary cookies anyway. We will respect your wish to not store or read cookies on your browser and our site will loose functionality.
         </p>
