@@ -1,8 +1,7 @@
-import { exportedForTesting as openingTimesTests } from '@/components/openingTimes'
+import { isOpen } from '@/utils/openingTimes'
 import { exportedForTesting as getCookieTest } from '@/utils/cookie/getCookie';
 
 describe('testing openingTimes module', () => {
-  const isOpen = openingTimesTests.isOpen;
   test('Should be closed on Monday 14:00', () => {
     expect(isOpen(new Date("2024-01-01T14:00:00"))).toBe(false);
   });
@@ -37,6 +36,14 @@ describe('testing openingTimes module', () => {
 
   test('Should be closed on Wednesday 23:00', () => {
     expect(isOpen(new Date("2024-01-03T23:00:00"))).toBe(false);
+  });
+
+  test('Should be closed on Thursday 23:00', () => {
+    expect(isOpen(new Date("2024-01-04T23:00:00"))).toBe(false);
+  });
+
+  test('Should be closed on Friday 02:00', () => {
+    expect(isOpen(new Date("2024-01-05T02:00:00"))).toBe(false);
   });
 });
 
