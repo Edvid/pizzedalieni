@@ -108,6 +108,11 @@ function LogIn(props: IPopupFormKind) {
       <Input label="Password" onChange={eventHandler}/>
       <APIRenderer logs={APILogs}/>
       <LoginSubmit data={inputs} onSubmit={onLoginSubmit}/>
+      <div className='pt-4'>
+        <a
+          href="/howdoideletemyself"
+          className='underline decoration-dotted underline-offset-4 hover:text-blue-400'>Forgotten password</a>
+      </div>
       <div className="my-4 h-[1px] bg-gray-400"></div>
       <p>No Account? Register</p>
       <button onClick={() => { props.onChangeUserState(userStates.SignUp); }} className="rounded-lg px-2 py-1 mt-2 bg-orange-500 hover:bg-transparent border-2 border-orange-500">here</button>
@@ -135,6 +140,11 @@ function UserPopup(props: IPopupFormKind) {
       </h1>
       <APIRenderer logs={APILogs}/>
       <LogoutSubmit token={getCookie("token")} onSubmit={onLogoutSubmit}/>
+      <div className='pt-4'>
+        <a
+          href="/howdoideletemyself"
+          className='underline decoration-dotted underline-offset-4 hover:text-blue-400'>Delete User</a>
+      </div>
     </PopupContainer>
   )
     

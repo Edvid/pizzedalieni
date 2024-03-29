@@ -1,0 +1,12 @@
+
+.message-container {
+  font-size: 1.5em;
+}
+
+.message-container b {
+  border-radius: 1rem;
+  display: inline-block;
+  padding: 0.2rem;
+  background-color: dodgerblue;
+  font-weight: 900;
+}
