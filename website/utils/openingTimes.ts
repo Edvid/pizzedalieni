@@ -55,7 +55,8 @@ function isInRange(t: HourMinute, start:HourMinute, end:HourMinute): boolean {
 type dayOffset = -7 | -6 | -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 function getWeekDayName(time: Date, offsetDay?: dayOffset) {
-  const offsetTime = new Date(time.setDate(time.getDate() + (offsetDay || 0)));
+  const offsetTime = new Date(time);
+  offsetTime.setDate(time.getDate() + (offsetDay || 0));
   return offsetTime.toLocaleDateString("en-US", {weekday: 'long'});
 }
 
@@ -63,9 +64,6 @@ export function isOpen(now: Date): boolean {
   const today: string = getWeekDayName(now);
   const yesterday: string = getWeekDayName(now, -1);
   const hourMinuteNow: HourMinute = `${now.getHours()}:${now.getMinutes()}` as HourMinute;
-  console.log(yesterday);
-  console.log(today);
-  console.log(hourMinuteNow);
 
   var inRangeOfTodaysOpeningTimes,inRangeOfYesterdaysOpeningTimes: boolean = false;
 
@@ -95,5 +93,3 @@ export function isOpen(now: Date): boolean {
   }
   return inRangeOfTodaysOpeningTimes || inRangeOfYesterdaysOpeningTimes;
 }
-
-isOpen(new Date());
