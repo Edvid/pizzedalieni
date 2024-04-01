@@ -17,7 +17,11 @@ const db = pgp(databaseConfig); // use pg-promise's connection function to creat
 const app = express();
 const port = 3001;
 
-app.use(cors({ origin: 'https://pizzedalieni.com'}));
+app.use(cors({
+  origin: 'https://pizzedalieni.com',
+  credentials: true,
+  methods: ['GET', 'POST']
+}));
 
 const jsonParser = bodyParser.json();
 
