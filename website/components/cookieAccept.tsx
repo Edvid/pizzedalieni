@@ -3,10 +3,14 @@ import getCookiePermission from "@/utils/cookie/getCookiePermission";
 import setCookiePermission from "@/utils/cookie/setCookiePermission";
 import DetailedDescription from "@/components/detailedDescription";
 import Image from 'next/image';
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export default function CookieAccept () {
-  const [ show, setShow ] = useState(!getCookiePermission());
+  const [ show, setShow ] = useState<boolean>(true);
+
+  useEffect(() => {
+    setShow(!getCookiePermission());
+  }, []);
 
   const acceptedCookie = () => {
     setCookiePermission();

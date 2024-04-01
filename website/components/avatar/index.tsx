@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AvatarButton from "./Button";
 import AvatarPopUpForm from "./popUpForm";
 import { userState, userStates } from "@/utils/userStates";
@@ -10,8 +10,12 @@ function xor(a: boolean, b: boolean): boolean {
 }
 
 function Avatar() {
-  const [userState, setUserState] = useState<userState>(getCookie("token") ? userStates.LoggedIn : userStates.LogIn );
+  const [userState, setUserState] = useState<userState>(userStates.LogIn);
   const [showPopup, setShowPopup] = useState(false)
+
+  useEffect(() => {
+    setUserState(getCookie("token") ? userStates.LoggedIn : userStates.LogIn);
+  }, []);
 
   const toggleShow = () => {
     setShowPopup(!showPopup);

@@ -1,3 +1,4 @@
+import { isClient } from "../isClient";
 import getCookiePermission from "./getCookiePermission";
 
 function getFromSemicolonSeperatedString (searchString: string, SemicolonSeperatedString: string): string {
@@ -9,6 +10,9 @@ function getFromSemicolonSeperatedString (searchString: string, SemicolonSeperat
 }
 
 export default function getCookie (str: string): string | undefined {
+  if (!isClient) {
+    throw new Error('This function should only be called on the client.');
+  }
   if (getCookiePermission()) {
     return getCookieUnchecked(str);
   }
