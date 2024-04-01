@@ -4,6 +4,7 @@ const saltRounds = 3;
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const pgp = require('pg-promise')();
+const cors = require('cors');
 
 const databaseConfig = {
   host: 'db',
@@ -15,6 +16,8 @@ const databaseConfig = {
 const db = pgp(databaseConfig); // use pg-promise's connection function to create the connection object
 const app = express();
 const port = 3001;
+
+app.use(cors({ origin: 'https://pizzedalieni.com'}));
 
 const jsonParser = bodyParser.json();
 
