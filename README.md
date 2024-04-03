@@ -26,6 +26,7 @@ What started as a project meant for me to fascilitate learning rudimentary Datab
 ### Front End
 - Rudimentary cookie storing and reading knowledge for user sign in purposes
 - Growing familiarity with TS and complex types such as typing of callbacks, mapped types, and the power of type narrowing
+- CORS, it's roll in web security, and how to allow cross origin (this point could have been put under #API too)
 
 ### Unix-like Systems
 - Growing familiarity with bash shell script
