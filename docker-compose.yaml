@@ -9,8 +9,6 @@ services:
     depends_on:
       - api
     restart: always
-    environment:
-      API_URL: ${API_URL}
     networks:
       - frontend
   api:
