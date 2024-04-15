@@ -17,8 +17,15 @@ const db = pgp(databaseConfig); // use pg-promise's connection function to creat
 const app = express();
 const port = 3001;
 
+const whitelist = new RegExp("https://(.+?\\.)?pizzedalieni\\.com");
 app.use(cors({
-  origin: 'https://*.pizzedalieni.com',
+  origin: function (origin, callback) {
+    if (origin.match(whitelist) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST'],
   "optionsSuccessStatus": 204
