@@ -18,7 +18,7 @@ const app = express();
 const port = 3001;
 
 app.use(cors({
-  origin: ['https://*.pizzedalieni.com'],
+  origin: 'https://*.pizzedalieni.com',
   credentials: true,
   methods: ['GET', 'POST'],
   "optionsSuccessStatus": 204
