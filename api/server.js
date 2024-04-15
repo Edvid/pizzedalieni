@@ -18,9 +18,10 @@ const app = express();
 const port = 3001;
 
 app.use(cors({
-  origin: /pizzedalieni\.com$/g,
+  origin: ['http://*.pizzedalieni.com'],
   credentials: true,
-  methods: ['GET', 'POST']
+  methods: ['GET', 'POST'],
+  "optionsSuccessStatus": 204
 }));
 
 const jsonParser = bodyParser.json();
