@@ -59,6 +59,16 @@ async function createHash(password) {
     .catch(err => console.error(err.message))
 }
 
+function verifyProxy(token) {
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    if (error.name === 'TokenExpiredError' && error.message === 'jwt expired' && error.expiredAt){
+      return { err: true }
+    }
+  }
+}
+
 async function validateUser(email, password) {
 
   var responses = {
@@ -225,7 +235,8 @@ app.post('/logout', jsonParser, async (request, response) => {
 app.post('/userbasket/set', jsonParser, async (request, response) => {
   const { token } = request.headers;
   const { basketContent } = request.body;
-  const { userID } = jwt.verify(token, process.env.JWT_SECRET);
+  const { userID, err } = verifyProxy(token);
+  if (err) return;
   await db.none("call user_addedinbasket_clear(${userid})", {
     userid: userID,
   });
@@ -246,7 +257,11 @@ app.post('/userbasket/set', jsonParser, async (request, response) => {
 
 app.get('/userbasket/get', async (request, response) => {
   const { token } = request.headers;
-  const { userID } = jwt.verify(token, process.env.JWT_SECRET);
+  const { userID, err } = verifyProxy(token)
+  if (err) {
+    response.send({error: "token expired" });
+    return;
+  }
   let pizzas = [];
 
   await db.manyOrNone("select * from user_addedinbasket_get(${userid})", {
@@ -266,7 +281,7 @@ app.get('/userbasket/get', async (request, response) => {
     userid: userID,
   });
 
-  response.send(pizzas);
+  response.send({pizzas: pizzas});
 });
 app.listen(port, () => {
   console.log(`Server up and running at http://localhost:${port}`);
