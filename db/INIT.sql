@@ -27,7 +27,7 @@ CREATE TABLE accounts (
 
 CREATE TABLE addables (
   id SERIAL PRIMARY KEY,
-  account_id INT NOT NULL REFERENCES accounts(id),
+  account_id INT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
   pizza_id INT NOT NULL,
   amount INT NOT NULL
 );
