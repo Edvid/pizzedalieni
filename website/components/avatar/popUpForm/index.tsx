@@ -24,10 +24,12 @@ export interface CommonAPIResponse {
 interface IPopupForm {
   userState: userState;
   onChangeUserState: (userStateToChangeTo: userState) => void;
+  onClose: () => void;
 }
 
 interface IPopupFormKind {
   onChangeUserState: (userStateToChangeTo: userState) => void;
+  onClose: () => void;
 }
 
 function containsOnlyOKLogs(response: CommonAPIResponse): Boolean {
@@ -54,7 +56,7 @@ function SignUp(props: IPopupFormKind) {
   }
 
   return (
-    <PopupContainer>
+    <PopupContainer onClose={props.onClose}>
       <h1 className="text-lg font-extrabold italic">Sign Up</h1>
       <Input label="First Name" onChange={eventHandler}/>
       <Input label="Last Name" onChange={eventHandler}/>
@@ -102,7 +104,7 @@ function LogIn(props: IPopupFormKind) {
   }
 
   return (
-    <PopupContainer>
+    <PopupContainer onClose={props.onClose}>
       <h1 className="text-lg font-extrabold italic">Log In</h1>
       <Input label="E-mail" onChange={eventHandler}/>
       <Input label="Password" onChange={eventHandler}/>
@@ -134,7 +136,7 @@ function UserPopup(props: IPopupFormKind) {
     }
   }
   return (
-    <PopupContainer>
+    <PopupContainer onClose={props.onClose}>
       <h1 className="text-lg font-extrabold italic">
         Hello, {getCookie("firstname")}
       </h1>
@@ -152,9 +154,9 @@ function UserPopup(props: IPopupFormKind) {
 
 export default function AvatarPopUpForm(props: IPopupForm) {
   const states: {[index in userState]: ReactNode} = {
-    'log in': <LogIn onChangeUserState={props.onChangeUserState}/>,
-    'sign up': <SignUp onChangeUserState={props.onChangeUserState}/>,
-    'logged in': <UserPopup onChangeUserState={props.onChangeUserState}/>,
+    'log in': <LogIn onChangeUserState={props.onChangeUserState} onClose={props.onClose}/>,
+    'sign up': <SignUp onChangeUserState={props.onChangeUserState} onClose={props.onClose}/>,
+    'logged in': <UserPopup onChangeUserState={props.onChangeUserState} onClose={props.onClose}/>,
   }
 
   return (

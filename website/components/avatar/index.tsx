@@ -40,7 +40,7 @@ function Avatar() {
       <div>
         {
           showPopup ?
-            <AvatarPopUpForm onChangeUserState={changeKind} userState={userState}/> :
+            <AvatarPopUpForm onChangeUserState={changeKind} userState={userState} onClose={() => setShowPopup(false)}/> :
             ""
         }
       </div>
