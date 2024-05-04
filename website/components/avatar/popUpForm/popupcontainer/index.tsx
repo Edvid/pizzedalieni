@@ -23,10 +23,18 @@ export default function PopUpContainer(props: IPopUpContainer) {
       }
     }
 
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        props.onClose();
+      }
+    }
+
     document.addEventListener('click', handleClick, true);
+    document.addEventListener('keydown', handleKey, true);
 
     return () => {
       document.removeEventListener('click', handleClick, true);
+      document.addEventListener('keydown', handleKey, true);
     }
   })
 
