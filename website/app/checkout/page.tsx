@@ -7,7 +7,9 @@ import deleteCookie from '@/utils/cookie/deleteCookie';
 
 export default function Checkout () {
 
-  if(typeof getCookie("current-basket") !== 'undefined'){
+  const currentBasket = getCookie("current-basket");
+
+  if(typeof currentBasket !== 'undefined' && currentBasket !== '[]'){
     setCookie("bought-basket", getCookie("current-basket") ?? "[]");
     deleteCookie("current-basket");
   }
