@@ -10,8 +10,8 @@ export default function Checkout () {
   const currentBasket = getCookie("current-basket");
 
   if(typeof currentBasket !== 'undefined' && currentBasket !== '[]'){
-    setCookie("bought-basket", getCookie("current-basket") ?? "[]");
     deleteCookie("current-basket");
+    setCookie("bought-basket", currentBasket ?? "[]");
   }
 
   return (
