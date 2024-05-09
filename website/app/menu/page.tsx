@@ -88,7 +88,7 @@ export default function Menu() {
       if(postPizzaIntervalFunc.current === undefined){
         postPizzaIntervalFunc.current = setInterval(() => {
           if (postPizzasTimer.current >= 300 && !havePostedPizzas.current) {
-            postPizzas(getCookie("token"));
+            postPizzas();
             havePostedPizzas.current = true;
           }
           postPizzasTimer.current += 100;
@@ -102,6 +102,7 @@ export default function Menu() {
     return () => {
       postPizzasTimer.current = 0;
       havePostedPizzas.current = false;
+      clearInterval(postPizzaIntervalFunc.current);
       postPizzaIntervalFunc.current = undefined
     }
 
