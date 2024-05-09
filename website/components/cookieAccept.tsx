@@ -19,6 +19,7 @@ export default function CookieAccept () {
   
   const technicalCookieReasons = [
     "BasketContent - stores what you have in your basket as a cookie so it won't be forgotten when you reload the site",
+    "bought-basket - stores all the data from BasketContent before wiping BasketContent when you go to checkout. This is so you can view your last order on your site despite your basket being wiped both in browser and on our servers.",
     "token - An encrypted cookie containing info about which user is logged in which only my server knows how to read. Essential for staying logged in as you navigate the site or authorizing any user specific behaviour on the site",
     "cookie-permission - A cookie that can only ever be set to \"yes\". Only used for knowing if or if you haven't accepted these cookies being used. No deny option, you can only ignore. Remembering your choice to deny would mean storing a cookie. Can't have that. The cookie permission box will have to follow you around everywhere as you use the site."
   ];
