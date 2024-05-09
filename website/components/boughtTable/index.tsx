@@ -1,4 +1,5 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 
 import setCookie from '@/utils/cookie/setCookie';
 import getCookie from '@/utils/cookie/getCookie';
@@ -6,13 +7,19 @@ import deleteCookie from '@/utils/cookie/deleteCookie';
 import postPizzas from '@/utils/api/postPizzas';
 
 export default function BoughtTable () {
-  const currentBasket = getCookie("current-basket");
+  const [boughtBasket, setBoughtBasket] = useState<string>("[]");
 
-  if(typeof currentBasket !== 'undefined' && currentBasket !== '[]'){
-    deleteCookie("current-basket");
-    postPizzas();
-    setCookie("bought-basket", currentBasket ?? "[]");
-  }
+  useEffect(() => {
+    const currentBasket = getCookie("current-basket");
+
+    if(typeof currentBasket !== 'undefined' && currentBasket !== '[]'){
+      deleteCookie("current-basket");
+      postPizzas();
+      setCookie("bought-basket", currentBasket ?? "[]");
+    }
+
+    setBoughtBasket(getCookie("bought-basket") ?? "[]");
+  }, [])
 
   return (
     <table className='m-auto rounded-lg'>
@@ -32,7 +39,7 @@ export default function BoughtTable () {
           </th>
         </tr>
         {
-          JSON.parse(getCookie("bought-basket") ?? "[]")
+          JSON.parse(boughtBasket)
           .map((
             element: {
               itemId: number,
