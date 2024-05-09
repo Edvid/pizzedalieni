@@ -8,10 +8,10 @@ import Image from 'next/image';
 import { Pizza, AddableItem } from '@/utils/basket/types';
 import { ensureBase64 } from '@/utils/base64';
 import Basket from '@/components/Basket';
-import getCookie from '@/utils/cookie/getCookie';
 import fetchBasketOfUser from '@/utils/basket/fetchBasketOfUser';
 import setBasketCookie from '@/utils/basket/setBasketCookie';
 import getBasketContentFromCookie from '@/utils/basket/getBasketContentFromCookie';
+import postPizzas from '@/utils/api/postPizzas';
 
 function PizzaRow (props: Pizza) {
   return (
@@ -71,30 +71,13 @@ export default function Menu() {
       .catch((e) => {if (e === "token was undefined") { setBasketContent(getBasketContentFromCookie()) }})
       .finally(() => StillFetchingBasket.current = false);
 
-    return () => { 
+    return () => {
       setPizzas([])
       setBasketContent([]);
     };
   }, [])
 
   useEffect(() => {
-
-    async function postPizzas(token?: string) {
-      if (typeof token === "undefined") return;
-      const data: {basketContent: AddableItem[]} =
-        {
-          basketContent: getBasketContentFromCookie()
-        }
-
-      fetch(process.env.NEXT_PUBLIC_API_URL + "/userbasket/set",{
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "token": token,
-        },
-        body: JSON.stringify(data)
-      })
-    }
 
     function updateBasketCookie(){
       setBasketCookie(basketContent);
@@ -104,7 +87,7 @@ export default function Menu() {
 
       if(postPizzaIntervalFunc.current === undefined){
         postPizzaIntervalFunc.current = setInterval(() => {
-          if (postPizzasTimer.current >= 1500 && !havePostedPizzas.current) {
+          if (postPizzasTimer.current >= 300 && !havePostedPizzas.current) {
             postPizzas(getCookie("token"));
             havePostedPizzas.current = true;
           }

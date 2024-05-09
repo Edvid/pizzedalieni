@@ -4,6 +4,7 @@ import styles from './styles.module.css';
 import setCookie from '@/utils/cookie/setCookie';
 import getCookie from '@/utils/cookie/getCookie';
 import deleteCookie from '@/utils/cookie/deleteCookie';
+import postPizzas from '@/utils/api/postPizzas';
 
 export default function Checkout () {
 
@@ -11,6 +12,7 @@ export default function Checkout () {
 
   if(typeof currentBasket !== 'undefined' && currentBasket !== '[]'){
     deleteCookie("current-basket");
+    postPizzas();
     setCookie("bought-basket", currentBasket ?? "[]");
   }
 
