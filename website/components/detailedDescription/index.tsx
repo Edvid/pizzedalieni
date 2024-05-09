@@ -28,7 +28,7 @@ export default function DetailedDescription(props: IDetailedDescription) {
         <InfoIcon/>
         <p className={styles["material-symbols-outlined"]}>arrow_drop_{show ? "up" : "down"}</p>
       </button>
-      <div className='my-4 ml-6'>
+      <div className='my-4 ml-6 overflow-scroll max-h-[calc(100vh-35em)]'>
         {show ? props.children : ""}
       </div>
     </div>
